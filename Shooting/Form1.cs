@@ -5,9 +5,9 @@ namespace Shooting
     {
         int animationTime = 0;
         BackGround backGround = new BackGround();
-        Image imageMinoriko = Image.FromFile("Minoriko.png");
-        Image imageBullet1 = Image.FromFile("Bullet1.png");
-        Image imageBullet2 = Image.FromFile("Bullet2.png");
+        Image imageMinoriko = Properties.Resources.Minoriko;
+        Image imageBullet1 = Properties.Resources.Bullet1;
+        Image imageBullet2 = Properties.Resources.Bullet2;
         List<Bullet> bullet1s = new List<Bullet>();
         List<Bullet> bullet2s = new List<Bullet>();
         public Form1()

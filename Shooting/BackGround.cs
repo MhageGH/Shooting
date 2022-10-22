@@ -5,7 +5,8 @@ namespace Shooting
 {
     internal class BackGround
     {
-        Mat src_img = OpenCvSharp.Cv2.ImRead("Ground.png");
+        static Bitmap image = Properties.Resources.Ground;
+        Mat src_img = OpenCvSharp.Extensions.BitmapConverter.ToMat(image);
         int shrink = 150;
         int offset = 0;
         int speed = 5;

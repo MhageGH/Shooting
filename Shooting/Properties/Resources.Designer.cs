@@ -63,9 +63,39 @@ namespace Shooting.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Bullet1 {
+            get {
+                object obj = ResourceManager.GetObject("Bullet1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Bullet2 {
+            get {
+                object obj = ResourceManager.GetObject("Bullet2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap Ground {
             get {
                 object obj = ResourceManager.GetObject("Ground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Minoriko {
+            get {
+                object obj = ResourceManager.GetObject("Minoriko", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
