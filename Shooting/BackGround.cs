@@ -1,41 +1,78 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using System.Drawing;
 
 namespace Shooting
 {
     internal class BackGround
     {
-        static Bitmap image = Properties.Resources.Ground;
-        Mat src_img = OpenCvSharp.Extensions.BitmapConverter.ToMat(image);
-        int shrink = 150;
-        int offset = 0;
-        int speed = 5;
-        int trimHeight = 500;
-        OpenCvSharp.Size screen_size = new OpenCvSharp.Size(500, 600);
+        NormalBackGround normalBackGround = new NormalBackGround();
+        SpellBackGround spellBackGround = new SpellBackGround();
 
-        public BackGround()
+        public bool SpellEnable = false;
+
+        public void Progress()
         {
-            Cv2.VConcat(src_img, src_img, src_img);
+            if (SpellEnable) spellBackGround.Progress();
+            else normalBackGround.Progress();
         }
 
         public void Draw(Graphics graphics)
         {
-            offset = (offset + speed) % (src_img.Height / 2);
-            var src_img_trimmed = src_img.Clone(new Rect(0, src_img.Height - offset - trimHeight, src_img.Width, trimHeight));
-            var inPoints = new Point2f[] 
-            {
-                new Point2f(0, 0), new Point2f(src_img_trimmed.Width, 0), new Point2f(src_img_trimmed.Width, src_img_trimmed.Height), new Point2f(0, src_img_trimmed.Height) 
-            };
-            var outPoints = new Point2f[]
-            {
-                new Point2f(shrink, 0), new Point2f(src_img_trimmed.Width - shrink, 0), new Point2f(src_img_trimmed.Width, src_img_trimmed.Height), new Point2f(0, src_img_trimmed.Height)
-            };
+            if (SpellEnable) spellBackGround.Draw(graphics);
+            else normalBackGround.Draw(graphics);
+        }
+    }
+
+    internal class SpellBackGround
+    {
+        public void Progress()
+        {
+
+        }
+
+        public void Draw(Graphics graphics)
+        {
+        }
+    }
+
+    internal class NormalBackGround
+    {
+        Bitmap imageSunset = Properties.Resources.Sunset;
+        Mat matGround = BitmapConverter.ToMat(Properties.Resources.Ground);
+        Mat matCloud = BitmapConverter.ToMat(Properties.Resources.Cloud);
+        Mat matmaple = BitmapConverter.ToMat(Properties.Resources.Maple);
+        int shrink = 150, groundOffset = 0, cloudOffset = 0, groundSpeed = 5, cloudSpeed = 8, trimWidth = 500, trimHeight = 500;
+        System.Drawing.Point position = new System.Drawing.Point(35, 16);
+        OpenCvSharp.Size screen_size = new OpenCvSharp.Size(387, 451);
+
+        public NormalBackGround()
+        {
+            Cv2.VConcat(matGround, matGround, matGround);
+            Cv2.VConcat(matCloud, matCloud, matCloud);
+        }
+
+        public void Progress()
+        {
+            groundOffset = (groundOffset + groundSpeed) % (matGround.Height / 2);
+            cloudOffset = (cloudOffset + cloudSpeed) % (matCloud.Height / 2);
+        }
+
+        public void Draw(Graphics graphics)
+        {
+            var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(trimWidth, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
+            var outPoints = new Point2f[] { new Point2f(shrink, 0), new Point2f(trimWidth - shrink, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
             var transMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
-            var dst_img = new Mat(new OpenCvSharp.Size(src_img_trimmed.Width, src_img_trimmed.Height), MatType.CV_8UC3);
-            Cv2.WarpPerspective(src_img_trimmed, dst_img, transMat, dst_img.Size());
-            dst_img = dst_img.Clone(new Rect(shrink, 0, src_img_trimmed.Width - 2 * shrink, src_img_trimmed.Height));
-            Cv2.Resize(dst_img, dst_img, screen_size);
-            graphics.DrawImage(dst_img.ToBitmap(), 0, 0);
+            var mats = new Mat[] { matGround, matCloud };
+            var offsets = new int[] { groundOffset, cloudOffset };
+            for (int i = 0; i < mats.Length; i++)
+            {
+                var trimRect = new Rect(0, mats[i].Height - offsets[i] - trimHeight, trimWidth, trimHeight);
+                var img = mats[i].Clone(trimRect).WarpPerspective(transMat, trimRect.Size)
+                    .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(screen_size).ToBitmap();
+                graphics.DrawImage(img, position.X, position.Y, img.Width, img.Height);
+            }
+            graphics.DrawImage(imageSunset, position.X, position.Y, imageSunset.Width, imageSunset.Height);
         }
     }
 }

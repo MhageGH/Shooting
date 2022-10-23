@@ -1,4 +1,4 @@
-
+﻿
 namespace Shooting
 {
     public partial class Form1 : Form
@@ -8,6 +8,7 @@ namespace Shooting
         Image imageMinoriko = Properties.Resources.Minoriko;
         Image imageBullet1 = Properties.Resources.Bullet1;
         Image imageBullet2 = Properties.Resources.Bullet2;
+        Image imageFrame = Properties.Resources.Frame;
         List<Bullet> bullet1s = new List<Bullet>();
         List<Bullet> bullet2s = new List<Bullet>();
         public Form1()
@@ -18,6 +19,7 @@ namespace Shooting
         private void timer1_Tick(object sender, EventArgs e)
         {
             Invalidate();
+            backGround.Progress();
             animationTime = (animationTime + 1) % 40;
             if (animationTime % 5 == 0)
             {
@@ -46,18 +48,20 @@ namespace Shooting
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
             backGround.Draw(e.Graphics);
             int n = animationTime / 10;
             e.Graphics.DrawImage(imageMinoriko, 220, 400, new Rectangle(50 * n, 0, 50, 50), GraphicsUnit.Pixel);
 
             for (int i = 0; i < bullet1s.Count; i++)
             {
-                //e.Graphics.DrawImage(bullet1s[i].image, bullet1s[i].position);
+                e.Graphics.DrawImage(bullet1s[i].image, bullet1s[i].position.X, bullet1s[i].position.Y, bullet1s[i].image.Width, bullet1s[i].image.Height);
             }
             for (int i = 0; i < bullet2s.Count; i++)
             {
-                //e.Graphics.DrawImage(bullet2s[i].image, bullet2s[i].position);
+                e.Graphics.DrawImage(bullet2s[i].image, bullet2s[i].position.X, bullet2s[i].position.Y, bullet2s[i].image.Width, bullet2s[i].image.Height);
             }
+            e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
         }
     }
 
