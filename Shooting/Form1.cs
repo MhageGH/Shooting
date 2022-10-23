@@ -55,11 +55,11 @@ namespace Shooting
 
             for (int i = 0; i < bullet1s.Count; i++)
             {
-                e.Graphics.DrawImage(bullet1s[i].image, bullet1s[i].position.X, bullet1s[i].position.Y, bullet1s[i].image.Width, bullet1s[i].image.Height);
+                //e.Graphics.DrawImage(bullet1s[i].image, bullet1s[i].position.X, bullet1s[i].position.Y, bullet1s[i].image.Width, bullet1s[i].image.Height);
             }
             for (int i = 0; i < bullet2s.Count; i++)
             {
-                e.Graphics.DrawImage(bullet2s[i].image, bullet2s[i].position.X, bullet2s[i].position.Y, bullet2s[i].image.Width, bullet2s[i].image.Height);
+                //e.Graphics.DrawImage(bullet2s[i].image, bullet2s[i].position.X, bullet2s[i].position.Y, bullet2s[i].image.Width, bullet2s[i].image.Height);
             }
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
         }
