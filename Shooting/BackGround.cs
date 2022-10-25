@@ -2,6 +2,7 @@
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Internal.Vectors;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Shooting
 {
@@ -64,7 +65,7 @@ namespace Shooting
             cloudOffset = (cloudOffset + cloudSpeed) % (matCloud.Height / 2);
             for (int i = 0; i < maples.Length; i++)
             {
-                maples[i].position.Y = (maples[i].position.Y + Maple.speed) % (position.Y + screen_size.Height);
+                maples[i].pos.Y = (maples[i].pos.Y + Maple.speed) % (position.Y + screen_size.Height);
                 for (int j = 0; j < maples[i].angles.Length; j++)
                 {
                     maples[i].angles[j] = (maples[i].angles[j] + maples[i].angular_speeds[j]) % (2 * (float)Math.PI);
@@ -85,16 +86,22 @@ namespace Shooting
                 var img = mats[i].Clone(trimRect).WarpPerspective(perspectivMat, trimRect.Size)
                     .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(screen_size).ToBitmap();
                 graphics.DrawImage(img, position.X, position.Y, img.Width, img.Height);
-                if (i == 0) DrawMaples(graphics, outPoints);    // 地面と雲の間に紅葉が描かれる   // TODO Maplesを大きいMatに一度写してから射影変換した方が良い。
+                if (i == 0)
+                {
+                    var maplesBitmap = CreateMaplesBitmap(outPoints);    // 地面と雲の間に紅葉が描かれる   // TODO Maplesを大きいMatに一度写してから射影変換した方が良い。
+                    graphics.DrawImage(maplesBitmap, position.X, position.Y, maplesBitmap.Width, maplesBitmap.Height);
+                }
             }
             graphics.DrawImage(imageSunset, position.X, position.Y, imageSunset.Width, imageSunset.Height);
         }
 
-        void DrawMaples(Graphics graphics, Point2f[] groundOutPoints)
+        Bitmap CreateMaplesBitmap(Point2f[] groundOutPoints)
         {
             var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(matMaple.Width, 0), new Point2f(matMaple.Width, matMaple.Height), new Point2f(0, matMaple.Height) };
             var center = new Point3f(matMaple.Width / 2, matMaple.Height / 2, 0);
             var outPoints = new Point2f[4];
+            var bitmap = new Bitmap(trimWidth, trimHeight, PixelFormat.Format32bppArgb); // 透明なBitmapキャンバスを作り、そこにGraphicsで書き込んでいく
+            var g = Graphics.FromImage(bitmap);
             for (int j = 0; j < maples.Length; j++)
             {
                 for (int i = 0; i < inPoints.Length; i++)
@@ -107,20 +114,22 @@ namespace Shooting
                 var a = groundOutPoints[1].X - groundOutPoints[0].X;
                 var b = groundOutPoints[2].X - groundOutPoints[3].X;
                 var h = groundOutPoints[2].Y - groundOutPoints[1].Y;
-                var y = maples[j].position.Y - groundOutPoints[0].Y;
+                var y = maples[j].pos.Y - groundOutPoints[0].Y;
                 var c = a + (b - a) * y / h;
                 var scale = c / b;
                 var centerX = (groundOutPoints[0].X + groundOutPoints[1].X) / 2;
-                var posX = centerX + (maples[j].position.X - centerX) * c / a;
+                var posX = centerX + (maples[j].pos.X - centerX) * c / a;
                 var image = matMaple.WarpPerspective(transMat, matMaple.Size()).Resize(new OpenCvSharp.Size(Maple.width * scale, Maple.height * scale)).ToBitmap();
-                graphics.DrawImage(image, posX, maples[j].position.Y, image.Width, image.Height);
+                g.DrawImage(image, posX, maples[j].pos.Y, image.Width, image.Height);
             }
+            g.Dispose();
+            return bitmap;
         }
 
         class Maple
         {
             const float max_angular_speed = 0.05f;
-            public Point2f position;
+            public Point2f pos;
             public float[] angles = new float[3];
             public float[] angular_speeds = new float[3];
             static public int width = 70, height = 70;
@@ -129,12 +138,8 @@ namespace Shooting
             public Maple()
             {
                 var random = new Random();
-                float max_position_x = position.X + screen_size.Width;
-                float min_position_x = position.X;
-                float max_position_y = position.Y + screen_size.Height;
-                float min_position_y = position.Y;
-                position.X = min_position_x + (max_position_x - min_position_x) * random.NextSingle();
-                position.Y = min_position_y + (max_position_y - min_position_y) * random.NextSingle();
+                pos.X = screen_size.Width * random.NextSingle();
+                pos.Y = screen_size.Height * random.NextSingle();
                 for (int i = 0; i < angles.Length; i++)
                 {
                     angles[i] = 2.0f * (float)Math.PI * random.NextSingle();
