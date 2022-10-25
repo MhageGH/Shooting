@@ -44,7 +44,7 @@ namespace Shooting
         Mat matGround = BitmapConverter.ToMat(Properties.Resources.Ground);
         Mat matCloud = BitmapConverter.ToMat(Properties.Resources.Cloud);
         Mat matMaple = BitmapConverter.ToMat(Properties.Resources.Maple);
-        int shrink = 150, groundOffset = 0, cloudOffset = 0, groundSpeed = 5, cloudSpeed = 8, trimWidth = 500, trimHeight = 500;
+        static int shrink = 150, groundOffset = 0, cloudOffset = 0, maplesOffset = 0, groundSpeed = 5, cloudSpeed = 8, trimWidth = 500, trimHeight = 500;
         static System.Drawing.Point position = new System.Drawing.Point(35, 16);
         static OpenCvSharp.Size screen_size = new OpenCvSharp.Size(387, 451);
         Maple[] maples = new Maple[10];
@@ -78,19 +78,15 @@ namespace Shooting
             var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(trimWidth, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
             var outPoints = new Point2f[] { new Point2f(shrink, 0), new Point2f(trimWidth - shrink, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
             var perspectivMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
-            var mats = new Mat[] { matGround, matCloud };
-            var offsets = new int[] { groundOffset, cloudOffset };
+            var maplesBitmap = CreateMaplesBitmap(outPoints);
+            var mats = new Mat[] { matGround, BitmapConverter.ToMat(maplesBitmap), matCloud };
+            var offsets = new int[] { groundOffset, maplesOffset, cloudOffset };
             for (int i = 0; i < mats.Length; i++)
             {
                 var trimRect = new Rect(0, mats[i].Height - offsets[i] - trimHeight, trimWidth, trimHeight);
                 var img = mats[i].Clone(trimRect).WarpPerspective(perspectivMat, trimRect.Size)
                     .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(screen_size).ToBitmap();
                 graphics.DrawImage(img, position.X, position.Y, img.Width, img.Height);
-                if (i == 0)
-                {
-                    var maplesBitmap = CreateMaplesBitmap(outPoints);    // 地面と雲の間に紅葉が描かれる   // TODO Maplesを大きいMatに一度写してから射影変換した方が良い。
-                    graphics.DrawImage(maplesBitmap, position.X, position.Y, maplesBitmap.Width, maplesBitmap.Height);
-                }
             }
             graphics.DrawImage(imageSunset, position.X, position.Y, imageSunset.Width, imageSunset.Height);
         }
@@ -111,16 +107,8 @@ namespace Shooting
                     outPoints[i] = new Point2f(p.X, p.Y);
                 }
                 var transMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
-                var a = groundOutPoints[1].X - groundOutPoints[0].X;
-                var b = groundOutPoints[2].X - groundOutPoints[3].X;
-                var h = groundOutPoints[2].Y - groundOutPoints[1].Y;
-                var y = maples[j].pos.Y - groundOutPoints[0].Y;
-                var c = a + (b - a) * y / h;
-                var scale = c / b;
-                var centerX = (groundOutPoints[0].X + groundOutPoints[1].X) / 2;
-                var posX = centerX + (maples[j].pos.X - centerX) * c / a;
-                var image = matMaple.WarpPerspective(transMat, matMaple.Size()).Resize(new OpenCvSharp.Size(Maple.width * scale, Maple.height * scale)).ToBitmap();
-                g.DrawImage(image, posX, maples[j].pos.Y, image.Width, image.Height);
+                var image = matMaple.WarpPerspective(transMat, matMaple.Size()).Resize(new OpenCvSharp.Size(Maple.width, Maple.height)).ToBitmap();
+                g.DrawImage(image, maples[j].pos.X, maples[j].pos.Y, image.Width, image.Height);
             }
             g.Dispose();
             return bitmap;
@@ -132,14 +120,14 @@ namespace Shooting
             public Point2f pos;
             public float[] angles = new float[3];
             public float[] angular_speeds = new float[3];
-            static public int width = 70, height = 70;
+            static public int width = 50, height = 50;
             static public float speed = 6;
 
             public Maple()
             {
                 var random = new Random();
-                pos.X = screen_size.Width * random.NextSingle();
-                pos.Y = screen_size.Height * random.NextSingle();
+                pos.X = trimWidth* random.NextSingle();
+                pos.Y = trimHeight * random.NextSingle();
                 for (int i = 0; i < angles.Length; i++)
                 {
                     angles[i] = 2.0f * (float)Math.PI * random.NextSingle();
