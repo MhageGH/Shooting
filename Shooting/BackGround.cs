@@ -1,7 +1,5 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using OpenCvSharp.Internal.Vectors;
-using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Shooting
@@ -10,6 +8,8 @@ namespace Shooting
     {
         NormalBackGround normalBackGround = new NormalBackGround();
         SpellBackGround spellBackGround = new SpellBackGround();
+        public static System.Drawing.Point position = new(35, 16);
+        public static OpenCvSharp.Size screen_size = new(387, 451);
 
         public bool SpellEnable = false;
 
@@ -28,13 +28,21 @@ namespace Shooting
 
     internal class SpellBackGround
     {
+        Bitmap imageSpellBack0 = Properties.Resources.SpellBack0;
+        Bitmap imageSpellBack1 = Properties.Resources.SpellBack1;
+        const int speed = 2;
+        System.Drawing.Point pos1 = new(BackGround.position.X, BackGround.position.Y);
+
         public void Progress()
         {
-
+            pos1.Y = (pos1.Y - BackGround.position.Y + speed) % BackGround.screen_size.Height + BackGround.position.Y;
         }
 
         public void Draw(Graphics graphics)
         {
+            graphics.DrawImage(imageSpellBack1, pos1.X, pos1.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
+            graphics.DrawImage(imageSpellBack1, pos1.X, pos1.Y - BackGround.screen_size.Height, BackGround.screen_size.Width, BackGround.screen_size.Height);
+            graphics.DrawImage(imageSpellBack0, BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
         }
     }
 
@@ -45,8 +53,6 @@ namespace Shooting
         Mat matCloud = BitmapConverter.ToMat(Properties.Resources.Cloud);
         Mat matMaple = BitmapConverter.ToMat(Properties.Resources.Maple);
         static int shrink = 150, groundOffset = 0, cloudOffset = 0, maplesOffset = 0, groundSpeed = 5, cloudSpeed = 8, trimWidth = 500, trimHeight = 500;
-        static System.Drawing.Point position = new System.Drawing.Point(35, 16);
-        static OpenCvSharp.Size screen_size = new OpenCvSharp.Size(387, 451);
         Maple[] maples = new Maple[10];
 
         public NormalBackGround()
@@ -65,7 +71,7 @@ namespace Shooting
             cloudOffset = (cloudOffset + cloudSpeed) % (matCloud.Height / 2);
             for (int i = 0; i < maples.Length; i++)
             {
-                maples[i].pos.Y = (maples[i].pos.Y + Maple.speed) % (position.Y + screen_size.Height);
+                maples[i].pos.Y = (maples[i].pos.Y + Maple.speed) % (BackGround.position.Y + BackGround.screen_size.Height);
                 for (int j = 0; j < maples[i].angles.Length; j++)
                 {
                     maples[i].angles[j] = (maples[i].angles[j] + maples[i].angular_speeds[j]) % (2 * (float)Math.PI);
@@ -85,10 +91,10 @@ namespace Shooting
             {
                 var trimRect = new Rect(0, mats[i].Height - offsets[i] - trimHeight, trimWidth, trimHeight);
                 var img = mats[i].Clone(trimRect).WarpPerspective(perspectivMat, trimRect.Size)
-                    .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(screen_size).ToBitmap();
-                graphics.DrawImage(img, position.X, position.Y, img.Width, img.Height);
+                    .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(BackGround.screen_size).ToBitmap();
+                graphics.DrawImage(img, BackGround.position.X, BackGround.position.Y, img.Width, img.Height);
             }
-            graphics.DrawImage(imageSunset, position.X, position.Y, imageSunset.Width, imageSunset.Height);
+            graphics.DrawImage(imageSunset, BackGround.position.X, BackGround.position.Y, imageSunset.Width, imageSunset.Height);
         }
 
         Bitmap CreateMaplesBitmap(Point2f[] groundOutPoints)

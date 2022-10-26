@@ -133,6 +133,26 @@ namespace Shooting.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap SpellBack0 {
+            get {
+                object obj = ResourceManager.GetObject("SpellBack0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap SpellBack1 {
+            get {
+                object obj = ResourceManager.GetObject("SpellBack1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap Sunset {
             get {
                 object obj = ResourceManager.GetObject("Sunset", resourceCulture);

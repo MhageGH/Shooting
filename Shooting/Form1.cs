@@ -11,9 +11,11 @@ namespace Shooting
         Image imageFrame = Properties.Resources.Frame;
         List<Bullet> bullet1s = new List<Bullet>();
         List<Bullet> bullet2s = new List<Bullet>();
+
         public Form1()
         {
             InitializeComponent();
+            backGround.SpellEnable = true;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
