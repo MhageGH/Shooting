@@ -51,7 +51,6 @@ namespace Shooting
         Bitmap imageSunset = Properties.Resources.Sunset;
         Mat matGround = BitmapConverter.ToMat(Properties.Resources.Ground);
         Mat matCloud = BitmapConverter.ToMat(Properties.Resources.Cloud);
-        Mat matMaple = BitmapConverter.ToMat(Properties.Resources.Maple);
         static int shrink = 150, groundOffset = 0, cloudOffset = 0, maplesOffset = 0, groundSpeed = 5, cloudSpeed = 8, trimWidth = 500, trimHeight = 500;
         Maple[] maples = new Maple[10];
 
@@ -59,24 +58,14 @@ namespace Shooting
         {
             Cv2.VConcat(matGround, matGround, matGround);
             Cv2.VConcat(matCloud, matCloud, matCloud);
-            for (int i = 0; i < maples.Length; i++)
-            {
-                maples[i] = new Maple();
-            }
+            for (int i = 0; i < maples.Length; i++) maples[i] = new Maple();
         }
 
         public void Progress()
         {
             groundOffset = (groundOffset + groundSpeed) % (matGround.Height / 2);
             cloudOffset = (cloudOffset + cloudSpeed) % (matCloud.Height / 2);
-            for (int i = 0; i < maples.Length; i++)
-            {
-                maples[i].pos.Y = (maples[i].pos.Y + Maple.speed) % (BackGround.position.Y + BackGround.screen_size.Height);
-                for (int j = 0; j < maples[i].angles.Length; j++)
-                {
-                    maples[i].angles[j] = (maples[i].angles[j] + maples[i].angular_speeds[j]) % (2 * (float)Math.PI);
-                }
-            }
+            for (int i = 0; i < maples.Length; i++) maples[i].Progress();
         }
 
         public void Draw(Graphics graphics)
@@ -99,29 +88,16 @@ namespace Shooting
 
         Bitmap CreateMaplesBitmap(Point2f[] groundOutPoints)
         {
-            var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(matMaple.Width, 0), new Point2f(matMaple.Width, matMaple.Height), new Point2f(0, matMaple.Height) };
-            var center = new Point3f(matMaple.Width / 2, matMaple.Height / 2, 0);
-            var outPoints = new Point2f[4];
             var bitmap = new Bitmap(trimWidth, trimHeight, PixelFormat.Format32bppArgb); // 透明なBitmapキャンバスを作り、そこにGraphicsで書き込んでいく
             var g = Graphics.FromImage(bitmap);
-            for (int j = 0; j < maples.Length; j++)
-            {
-                for (int i = 0; i < inPoints.Length; i++)
-                {
-                    var p = new Point3f(inPoints[i].X, inPoints[i].Y, 0);
-                    p = Rotate(p, center, maples[j].angles[0], maples[j].angles[1], maples[j].angles[2]);
-                    outPoints[i] = new Point2f(p.X, p.Y);
-                }
-                var transMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
-                var image = matMaple.WarpPerspective(transMat, matMaple.Size()).Resize(new OpenCvSharp.Size(Maple.width, Maple.height)).ToBitmap();
-                g.DrawImage(image, maples[j].pos.X, maples[j].pos.Y, image.Width, image.Height);
-            }
+            for (int j = 0; j < maples.Length; j++) maples[j].Draw(g);
             g.Dispose();
             return bitmap;
         }
 
         class Maple
         {
+            Mat matMaple = BitmapConverter.ToMat(Properties.Resources.Maple);
             const float max_angular_speed = 0.05f;
             public Point2f pos;
             public float[] angles = new float[3];
@@ -140,22 +116,45 @@ namespace Shooting
                     angular_speeds[i] = max_angular_speed*random.NextSingle();
                 }
             }
-        }
 
-        Point3f Rotate(Point3f point, Point3f center, float angleX, float angleY, float angleZ)
-        {
-            var p0 = point - center;
-            Point3f p1, p2, p3;
-            p1.X = p0.X;
-            p1.Y = p0.Y * (float)Math.Cos(angleX) - p0.Z * (float)Math.Sin(angleX);
-            p1.Z = p0.Y * (float)Math.Sin(angleX) + p0.Z * (float)Math.Cos(angleX);
-            p2.X = p1.Z * (float)Math.Sin(angleY) + p1.X * (float)Math.Cos(angleY);
-            p2.Y = p1.Y;
-            p2.Z = p1.Z * (float)Math.Cos(angleY) - p1.X * (float)Math.Sin(angleY);
-            p3.X = p2.X * (float)Math.Cos(angleZ) - p2.Y * (float)Math.Sin(angleZ);
-            p3.Y = p2.X * (float)Math.Sin(angleZ) + p2.Y * (float)Math.Cos(angleZ);
-            p3.Z = p2.Z;
-            return p3 + center;
+            public void Progress()
+            {
+                pos.Y = (pos.Y + Maple.speed) % (BackGround.position.Y + BackGround.screen_size.Height);
+                for (int j = 0; j < angles.Length; j++) angles[j] = (angles[j] + angular_speeds[j]) % (2 * (float)Math.PI);
+            }
+
+            public void Draw(Graphics g)
+            {
+                var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(matMaple.Width, 0), new Point2f(matMaple.Width, matMaple.Height), new Point2f(0, matMaple.Height) };
+                var center = new Point3f(matMaple.Width / 2, matMaple.Height / 2, 0);
+                var outPoints = new Point2f[4];
+                for (int i = 0; i < inPoints.Length; i++)
+                {
+                    var p = new Point3f(inPoints[i].X, inPoints[i].Y, 0);
+                    p = Rotate(p, center, angles[0], angles[1], angles[2]);
+                    outPoints[i] = new Point2f(p.X, p.Y);
+                }
+                var transMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
+                var image = matMaple.WarpPerspective(transMat, matMaple.Size()).Resize(new OpenCvSharp.Size(Maple.width, Maple.height)).ToBitmap();
+                g.DrawImage(image, pos.X, pos.Y, image.Width, image.Height);
+
+            }
+
+            Point3f Rotate(Point3f point, Point3f center, float angleX, float angleY, float angleZ)
+            {
+                var p0 = point - center;
+                Point3f p1, p2, p3;
+                p1.X = p0.X;
+                p1.Y = p0.Y * (float)Math.Cos(angleX) - p0.Z * (float)Math.Sin(angleX);
+                p1.Z = p0.Y * (float)Math.Sin(angleX) + p0.Z * (float)Math.Cos(angleX);
+                p2.X = p1.Z * (float)Math.Sin(angleY) + p1.X * (float)Math.Cos(angleY);
+                p2.Y = p1.Y;
+                p2.Z = p1.Z * (float)Math.Cos(angleY) - p1.X * (float)Math.Sin(angleY);
+                p3.X = p2.X * (float)Math.Cos(angleZ) - p2.Y * (float)Math.Sin(angleZ);
+                p3.Y = p2.X * (float)Math.Sin(angleZ) + p2.Y * (float)Math.Cos(angleZ);
+                p3.Z = p2.Z;
+                return p3 + center;
+            }
         }
     }
 }

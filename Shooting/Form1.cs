@@ -15,7 +15,7 @@ namespace Shooting
         public Form1()
         {
             InitializeComponent();
-            backGround.SpellEnable = true;
+            backGround.SpellEnable = false;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
