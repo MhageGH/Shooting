@@ -9,7 +9,7 @@ namespace Shooting
         NormalBackGround normalBackGround = new NormalBackGround();
         SpellBackGround spellBackGround = new SpellBackGround();
         public static System.Drawing.Point position = new(35, 16);
-        public static OpenCvSharp.Size screen_size = new(387, 451);
+        public static System.Drawing.Size screen_size = new(387, 451);
 
         public bool SpellEnable = false;
 
@@ -80,7 +80,8 @@ namespace Shooting
                 {
                     var trimRect = new Rect(0, mats[i].Height - offsets[i] - trimHeight, trimWidth, trimHeight);
                     var img = mats[i].Clone(trimRect).WarpPerspective(perspectivMat, trimRect.Size)
-                        .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height)).Resize(BackGround.screen_size).ToBitmap();
+                        .Clone(new Rect(shrink, 0, trimRect.Width - 2 * shrink, trimRect.Height))
+                        .Resize(new OpenCvSharp.Size(BackGround.screen_size.Width, BackGround.screen_size.Height)).ToBitmap();
                     graphics.DrawImage(img, BackGround.position.X, BackGround.position.Y, img.Width, img.Height);
                 }
                 graphics.DrawImage(imageSunset, BackGround.position.X, BackGround.position.Y, imageSunset.Width, imageSunset.Height);
