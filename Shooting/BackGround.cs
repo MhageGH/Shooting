@@ -1,6 +1,7 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Drawing.Imaging;
+using System.Numerics;
 
 namespace Shooting
 {
@@ -8,7 +9,7 @@ namespace Shooting
     {
         NormalBackGround normalBackGround = new NormalBackGround();
         SpellBackGround spellBackGround = new SpellBackGround();
-        public static System.Drawing.Point position = new(35, 16);
+        public static Vector2 position = new(35, 16);
         public static System.Drawing.Size screen_size = new(387, 451);
 
         public bool SpellEnable = false;
@@ -31,7 +32,7 @@ namespace Shooting
             Bitmap imageSpellBack0 = Properties.Resources.SpellBack0;
             Bitmap imageSpellBack1 = Properties.Resources.SpellBack1;
             const int speed = 2;
-            System.Drawing.Point pos1 = new(BackGround.position.X, BackGround.position.Y);
+            Vector2 pos1 = new(BackGround.position.X, BackGround.position.Y);
 
             public void Progress()
             {
@@ -70,8 +71,8 @@ namespace Shooting
 
             public void Draw(Graphics graphics)
             {
-                var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(trimWidth, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
-                var outPoints = new Point2f[] { new Point2f(shrink, 0), new Point2f(trimWidth - shrink, 0), new Point2f(trimWidth, trimHeight), new Point2f(0, trimHeight) };
+                var inPoints = new Point2f[] { new(0, 0), new(trimWidth, 0), new(trimWidth, trimHeight), new(0, trimHeight) };
+                var outPoints = new Point2f[] { new(shrink, 0), new(trimWidth - shrink, 0), new(trimWidth, trimHeight), new(0, trimHeight) };
                 var perspectivMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
                 var maplesBitmap = CreateMaplesBitmap(outPoints);
                 var mats = new Mat[] { matGround, BitmapConverter.ToMat(maplesBitmap), matCloud };
@@ -126,7 +127,7 @@ namespace Shooting
 
                 public void Draw(Graphics g)
                 {
-                    var inPoints = new Point2f[] { new Point2f(0, 0), new Point2f(matMaple.Width, 0), new Point2f(matMaple.Width, matMaple.Height), new Point2f(0, matMaple.Height) };
+                    var inPoints = new Point2f[] { new(0, 0), new(matMaple.Width, 0), new(matMaple.Width, matMaple.Height), new(0, matMaple.Height) };
                     var center = new Point3f(matMaple.Width / 2, matMaple.Height / 2, 0);
                     var outPoints = new Point2f[4];
                     for (int i = 0; i < inPoints.Length; i++)

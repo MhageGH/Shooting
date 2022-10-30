@@ -1,21 +1,24 @@
-﻿namespace Shooting
+﻿using System.Numerics;
+
+namespace Shooting
 {
     internal class Shot : ShootingObject
     {
         static Image image = Properties.Resources.Shot;
+        static int speed = 20;
         static float radius = 10;
         static int effectID = 0;
-        public PointF position;
+        public Vector2 position;
         public bool enable = true;
 
-        public Shot(PointF position)
+        public Shot(Vector2 position)
         {
             this.position = position;
         }
 
         public void Progress()
         {
-            position.Y -= 20;
+            position.Y -= speed;
             if (position.Y < BackGround.position.Y) enable = false;
         }
 

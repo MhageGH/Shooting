@@ -1,11 +1,12 @@
 ﻿using NAudio.Wave;
+using System.Numerics;
 using System.Windows.Input;
 
 namespace Shooting
 {
     internal class Minoriko : ShootingObject
     {
-        static Point initial_position = new Point(BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
+        static Vector2 initial_position = new (BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
         static int initial_life = 3;
         static float high_speed = 4;
         static float low_speed = 2;
@@ -25,22 +26,15 @@ namespace Shooting
         WaveStream[] soundEffectStreams;
         WaveOut[] soundEffects;
 
-        public PointF position = new(initial_position.X, initial_position.Y);
+        public Vector2 position = new(initial_position.X, initial_position.Y);
 
         public Minoriko(List<Shot> shots, WaveStream[] soundEffectStreams, WaveOut[] soundEffects)
         {
             this.shots = shots;
             this.soundEffectStreams = soundEffectStreams;
             this.soundEffects = soundEffects;
-            for (int i = 0; i < trimRects.GetLength(0); i++)
-            {
-                for (int j = 0; j < trimRects.GetLength(1); j++)
-                {
+            for (int i = 0; i < trimRects.GetLength(0); i++) for (int j = 0; j < trimRects.GetLength(1); j++)
                     trimRects[i, j] = new Rectangle(i * width, j * height, width, height);
-                }
-            }
-
-            this.shots = shots;
         }
 
         public void Progress()

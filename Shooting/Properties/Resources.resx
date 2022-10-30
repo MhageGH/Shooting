@@ -121,14 +121,56 @@
   <data name="BGM0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BGM0.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="BigMinoriko" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BigMinoriko.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BigShizuha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BigShizuha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Bullet1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Bullet1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Bullet2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Bullet2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Bullet3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bullet3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bullet4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bullet4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bullet5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bullet5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bullet6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bullet6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bullet7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bullet7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EffectSprite6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EffectSprite6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -141,6 +183,9 @@
   </data>
   <data name="Minoriko" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Minoriko.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PowerBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PowerBar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SE0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SE0.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -178,6 +223,12 @@
   <data name="SE9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SE9.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Shizuha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shizuha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShizuhaName" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShizuhaName.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Shot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Shot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -187,7 +238,19 @@
   <data name="SpellBack1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SpellBack1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SpellName0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SpellName0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpellName1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SpellName1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Sunset" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sunset.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TextBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TextBack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
