@@ -14,10 +14,13 @@ namespace Shooting
         readonly int width = image.Width / trimRects.GetLength(0);
         readonly int height = image.Height / trimRects.GetLength(1);
         readonly int animInterval = 10;
-        int time = 0;
+        int animTime = 0;
         (int x, int y) trimNumber;
+        bool comeback = true;
+        bool invincible = false;
+        int comebackTime = 0;
 
-        public PointF position = new (initial_position.X, initial_position.Y - 100);
+        public PointF position = new (initial_position.X, initial_position.Y);
 
         public Minoriko()
         {
@@ -32,8 +35,23 @@ namespace Shooting
 
         public void Progress()
         {
+            animTime = (animTime + 1) % (animInterval * trimRects.GetLength(0));
+            if (comeback)
+            {
+                trimNumber.y = 0;
+                position.Y -= low_speed;
+                if (++comebackTime >= 30) comeback = false;
+                return;
+            }
+            if (invincible)
+            {
+                if (++comebackTime >= 60)
+                {
+                    invincible = false;
+                    comebackTime = 0;
+                }
+            }
             trimNumber.y = 0;
-            time = (time + 1) % (animInterval * trimRects.GetLength(0));
             float speed = high_speed;
             if (Keyboard.IsKeyDown(Key.LeftShift)) speed = low_speed;   // プロジェクトのプロパティでWPFを有効にすることでKeyboardクラスが使える
             if (Keyboard.IsKeyDown(Key.Right))
@@ -52,8 +70,9 @@ namespace Shooting
 
         public void Draw(Graphics graphics)
         {
-            trimNumber.x = time / animInterval;
-            graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
+            trimNumber.x = animTime / animInterval;
+            if (!invincible || comebackTime % 4 < 2)    // 無敵時間は点滅
+                graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
         }
     }
 }
