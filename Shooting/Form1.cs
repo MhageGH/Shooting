@@ -38,6 +38,7 @@ namespace Shooting
             backGround.Progress();
             minoriko.Progress();
             foreach (var shot in shots) shot.Progress();
+            shots.RemoveAll(s => s.enable == false);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
