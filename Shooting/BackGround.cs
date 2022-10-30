@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 
 namespace Shooting
 {
-    internal class BackGround
+    internal class BackGround : ShootingObject
     {
         NormalBackGround normalBackGround = new NormalBackGround();
         SpellBackGround spellBackGround = new SpellBackGround();

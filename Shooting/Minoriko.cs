@@ -1,9 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using NAudio.Wave;
 using System.Windows.Input;
 
 namespace Shooting
 {
-    internal class Minoriko
+    internal class Minoriko : ShootingObject
     {
         static Point initial_position = new Point(BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
         static int initial_life = 3;
@@ -19,11 +19,19 @@ namespace Shooting
         bool comeback = true;
         bool invincible = false;
         int comebackTime = 0;
+        bool shootable = false;
+        int shootTime = 0;
+        List<Shot> shots;
+        WaveStream[] soundEffectStreams;
+        WaveOut[] soundEffects;
 
-        public PointF position = new (initial_position.X, initial_position.Y);
+        public PointF position = new(initial_position.X, initial_position.Y);
 
-        public Minoriko()
+        public Minoriko(List<Shot> shots, WaveStream[] soundEffectStreams, WaveOut[] soundEffects)
         {
+            this.shots = shots;
+            this.soundEffectStreams = soundEffectStreams;
+            this.soundEffects = soundEffects;
             for (int i = 0; i < trimRects.GetLength(0); i++)
             {
                 for (int j = 0; j < trimRects.GetLength(1); j++)
@@ -31,6 +39,8 @@ namespace Shooting
                     trimRects[i, j] = new Rectangle(i * width, j * height, width, height);
                 }
             }
+
+            this.shots = shots;
         }
 
         public void Progress()
@@ -38,9 +48,14 @@ namespace Shooting
             animTime = (animTime + 1) % (animInterval * trimRects.GetLength(0));
             if (comeback)
             {
+                shootable = false;
                 trimNumber.y = 0;
                 position.Y -= low_speed;
-                if (++comebackTime >= 30) comeback = false;
+                if (++comebackTime >= 30)
+                {
+                    comeback = false;
+                    shootable = true;
+                }
                 return;
             }
             if (invincible)
@@ -51,6 +66,7 @@ namespace Shooting
                     comebackTime = 0;
                 }
             }
+
             trimNumber.y = 0;
             float speed = high_speed;
             if (Keyboard.IsKeyDown(Key.LeftShift)) speed = low_speed;   // プロジェクトのプロパティでWPFを有効にすることでKeyboardクラスが使える
@@ -66,6 +82,21 @@ namespace Shooting
             }
             if (Keyboard.IsKeyDown(Key.Up)) position.Y -= speed;
             if (Keyboard.IsKeyDown(Key.Down)) position.Y += speed;
+
+            if (shootable)
+            {
+                if (++shootTime >= 3)
+                {
+                    if (Keyboard.IsKeyDown(Key.Z))
+                    {
+                        shots.Add(new Shot(new(position.X + 10, position.Y)));
+                        shots.Add(new Shot(new(position.X - 10, position.Y)));
+                        soundEffectStreams[4].Position = 0;
+                        soundEffects[4].Play();
+                    }
+                    shootTime = 0;
+                }
+            }
         }
 
         public void Draw(Graphics graphics)

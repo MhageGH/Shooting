@@ -251,6 +251,16 @@ namespace Shooting.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Shot {
+            get {
+                object obj = ResourceManager.GetObject("Shot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap SpellBack0 {
             get {
                 object obj = ResourceManager.GetObject("SpellBack0", resourceCulture);
