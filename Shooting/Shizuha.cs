@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Microsoft.VisualBasic;
+using System.Numerics;
 
 namespace Shooting
 {
@@ -6,7 +7,8 @@ namespace Shooting
     {
         int state = 0;
         Minoriko minoriko;
-        public Vector2 position = new(BackGround.position.X + BackGround.screen_size.Width / 2, 100);
+        static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, 100);
+        public Vector2 position = initial_position + new Vector2(200, 200);
         public bool spellEnable;
         Animation animation = new();
         Mover mover = new();
@@ -21,7 +23,19 @@ namespace Shooting
         public void Progress()
         {
             animation.Progress();
-            mover.Move0(ref position, minoriko.position);
+            switch (state)
+            {
+                case 0:
+                    if (mover.Move0(ref position) == true) state = 1;
+                    break;
+                case 1:
+                    mover.Reset();
+                    state = 2;
+                    break;
+                case 2:
+                    mover.Move1(ref position, minoriko.position);
+                    break;
+            }
         }
 
         public void Draw(Graphics graphics)
@@ -64,14 +78,39 @@ namespace Shooting
         {
             int time = 0;
             int endOfTime = 0;
+            const float speed_norm = 4;
             public Vector2 speed = new(0, 0);
 
-            // 一定間隔ごとに一定速度で、ランダムな時間、移動可能範囲内を移動する
-            // 方向はターゲットの方を向くx座標の単位ベクトルを-45～+45°のランダム角で回転させた方向
-            public void Move0(ref Vector2 position, Vector2 minoriko_position)
+            /// <summary>
+            /// 新しい移動開始時に行う時間のリセット
+            /// </summary>
+            public void Reset()
+            {
+                time = 0;
+            }
+
+            /// <summary>
+            /// 一定速度で初期位置に戻り、一定時間経過後trueを返す
+            /// </summary>
+            public bool Move0(ref Vector2 position)
+            {
+                const int waitTime = 60;
+                var v = initial_position - position;
+                speed = v / v.Length() * speed_norm;
+                if (v.Length() > 2 * speed_norm) position += speed;
+                else speed = new(0, 0);
+                if (++time >= waitTime && speed.LengthSquared() < 0.1) return true;
+                return false;
+            }
+
+            /// <summary>
+            /// 一定間隔ごとに一定速度で、ランダムな時間、移動可能範囲内を移動する。
+            /// 方向は穣子の方を向くx座標の単位ベクトルを-45～+45°のランダム角で回転させた方向
+            /// </summary>
+            public void Move1(ref Vector2 position, Vector2 minoriko_position)
             {
                 const int interval = 45;
-                const float speed_norm = 4;
+                const int endOfTime_min = 10;
                 const int endOfTime_max = 25;
                 int x_min = (int)BackGround.position.X + 100;
                 int x_max = (int)BackGround.position.X + BackGround.screen_size.Width - 100;
@@ -81,7 +120,7 @@ namespace Shooting
                 {
                     var direction = new Vector2();
                     var rand = new Random();
-                    endOfTime = (int)(endOfTime_max * rand.NextSingle());
+                    endOfTime = (int)((endOfTime_max - endOfTime_min) * rand.NextSingle() + endOfTime_min);
                     var theta = (Math.PI / 2) * (rand.NextDouble() - 0.5);
                     var cos = (float)Math.Cos(theta);
                     var sin = (float)Math.Sin(theta);
@@ -94,21 +133,12 @@ namespace Shooting
                 else speed = new(0, 0);
                 if (++time >= interval) time = 0;
             }
-
-            public void Move1()
-            {
-                // TODO
-            }
-
-            public void Move2()
-            {
-                // TODO
-            }
         }
 
         class Atacker
         {
-            static int time = 0;
+            const int start_time = 120;
+            int time = 0;
 
             public void Attack0()
             {
