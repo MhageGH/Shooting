@@ -6,17 +6,10 @@ namespace Shooting
 {
     internal class Minoriko : ShootingObject
     {
-        static Vector2 initial_position = new (BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
+        static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
         static int initial_life = 3;
         static float high_speed = 4;
         static float low_speed = 2;
-        static Image image = Properties.Resources.Minoriko;
-        static Rectangle[,] trimRects = new Rectangle[4, 3];
-        readonly int width = image.Width / trimRects.GetLength(0);
-        readonly int height = image.Height / trimRects.GetLength(1);
-        readonly int animInterval = 10;
-        int animTime = 0;
-        (int x, int y) trimNumber;
         bool comeback = true;
         bool invincible = false;
         int comebackTime = 0;
@@ -25,6 +18,7 @@ namespace Shooting
         List<Shot> shots;
         WaveStream[] soundEffectStreams;
         WaveOut[] soundEffects;
+        Animation animation = new();
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
 
@@ -33,17 +27,14 @@ namespace Shooting
             this.shots = shots;
             this.soundEffectStreams = soundEffectStreams;
             this.soundEffects = soundEffects;
-            for (int i = 0; i < trimRects.GetLength(0); i++) for (int j = 0; j < trimRects.GetLength(1); j++)
-                    trimRects[i, j] = new Rectangle(i * width, j * height, width, height);
         }
 
         public void Progress()
         {
-            animTime = (animTime + 1) % (animInterval * trimRects.GetLength(0));
             if (comeback)
             {
                 shootable = false;
-                trimNumber.y = 0;
+                animation.trimNumber.y = 0;
                 position.Y -= low_speed;
                 if (++comebackTime >= 30)
                 {
@@ -61,18 +52,18 @@ namespace Shooting
                 }
             }
 
-            trimNumber.y = 0;
+            animation.trimNumber.y = 0;
             float speed = high_speed;
             if (Keyboard.IsKeyDown(Key.LeftShift)) speed = low_speed;   // プロジェクトのプロパティでWPFを有効にすることでKeyboardクラスが使える
             if (Keyboard.IsKeyDown(Key.Right))
             {
                 position.X += speed;
-                trimNumber.y = 1;
+                animation.trimNumber.y = 1;
             }
             if (Keyboard.IsKeyDown(Key.Left))
             {
                 position.X -= speed;
-                trimNumber.y = 2;
+                animation.trimNumber.y = 2;
             }
             if (Keyboard.IsKeyDown(Key.Up)) position.Y -= speed;
             if (Keyboard.IsKeyDown(Key.Down)) position.Y += speed;
@@ -95,9 +86,37 @@ namespace Shooting
 
         public void Draw(Graphics graphics)
         {
-            trimNumber.x = animTime / animInterval;
-            if (!invincible || comebackTime % 4 < 2)    // 無敵時間は点滅
-                graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
+            animation.Draw(graphics, position, invincible, comebackTime);
+        }
+
+        class Animation
+        {
+            static Image image = Properties.Resources.Minoriko;
+            static Rectangle[,] trimRects = new Rectangle[4, 3];
+            readonly int width = image.Width / trimRects.GetLength(0);
+            readonly int height = image.Height / trimRects.GetLength(1);
+            readonly int interval = 10;
+            int time = 0;
+
+            public (int x, int y) trimNumber;
+
+            public Animation()
+            {
+                for (int i = 0; i < trimRects.GetLength(0); i++) for (int j = 0; j < trimRects.GetLength(1); j++)
+                        trimRects[i, j] = new Rectangle(i * width, j * height, width, height);
+            }
+
+            public void Progress()
+            {
+                time = (time + 1) % (interval * trimRects.GetLength(0));
+            }
+
+            public void Draw(Graphics graphics, Vector2 position, bool invincible, int comebackTime)
+            {
+                trimNumber.x = time / interval;
+                if (!invincible || comebackTime % 4 < 2)    // 無敵時間は点滅
+                    graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
+            }
         }
     }
 }

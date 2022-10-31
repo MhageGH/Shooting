@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using System.Linq;
 
 namespace Shooting
 {
@@ -14,9 +15,10 @@ namespace Shooting
         static WaveOut bgm = new();
         static WaveOut[] soundEffects = new WaveOut[soundEffectStreams.Length].Select(s => s = new()).ToArray();
         static List<Shot> shots = new ();
+        static BackGround backGround = new();
         static Minoriko minoriko = new(shots, soundEffectStreams, soundEffects);
         static Shizuha shizuha = new(minoriko);
-        static BackGround backGround = new();
+        static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
 
         public Form1()
         {
@@ -36,9 +38,7 @@ namespace Shooting
                 bgm.Play();
             }
             Invalidate();
-            backGround.Progress();
-            minoriko.Progress();
-            shizuha.Progress();
+            foreach (var shootingObject in shootingObjects) shootingObject.Progress();
             foreach (var shot in shots) shot.Progress();
             shots.RemoveAll(s => s.enable == false);
         }
@@ -46,9 +46,7 @@ namespace Shooting
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
-            backGround.Draw(e.Graphics);
-            minoriko.Draw(e.Graphics);
-            shizuha.Draw(e.Graphics);
+            foreach (var shootingObject in shootingObjects) shootingObject.Draw(e.Graphics);
             foreach (var shot in shots) shot.Draw(e.Graphics);
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
         }
