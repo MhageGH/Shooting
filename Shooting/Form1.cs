@@ -7,17 +7,12 @@ namespace Shooting
     {
         static Image imageFrame = Properties.Resources.Frame;
         static WaveStream bgmStream = new Mp3FileReader(new System.IO.MemoryStream(Properties.Resources.BGM0));
-        static WaveStream[] soundEffectStreams = new WaveFileReader[] {
-            new (Properties.Resources.SE0), new(Properties.Resources.SE1), new(Properties.Resources.SE2),new(Properties.Resources.SE3),
-            new (Properties.Resources.SE4), new(Properties.Resources.SE5), new(Properties.Resources.SE6),new(Properties.Resources.SE7),
-            new (Properties.Resources.SE8), new(Properties.Resources.SE9), new(Properties.Resources.SE10),new(Properties.Resources.SE11)
-        };
         static WaveOut bgm = new();
-        static WaveOut[] soundEffects = new WaveOut[soundEffectStreams.Length].Select(s => s = new()).ToArray();
+        static SoundEffect soundEffect = new();
         static List<Shot> shots = new ();
         static BackGround backGround = new();
-        static Minoriko minoriko = new(shots, soundEffectStreams, soundEffects);
-        static Shizuha shizuha = new(minoriko, soundEffectStreams, soundEffects);
+        static Minoriko minoriko = new(shots, soundEffect);
+        static Shizuha shizuha = new(minoriko, soundEffect);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
 
         public Form1()
@@ -27,7 +22,6 @@ namespace Shooting
             bgm.Init(bgmStream);
             bgm.Volume = 0.5f; // NAudioのボリュームはstaticクラスに結びついているため全WaveOutオブジェクトに適用される。個別の音量調整は出来ない。予め比率を調整しておく。
             bgm.Play();
-            for (int i = 0; i < soundEffects.Length; ++i) soundEffects[i].Init(soundEffectStreams[i]);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -58,4 +52,26 @@ namespace Shooting
 
         public void Draw(Graphics graphics);
     }
+
+    internal class SoundEffect
+    {
+        static WaveStream[] seStreams = new WaveFileReader[] {
+            new (Properties.Resources.SE0), new(Properties.Resources.SE1), new(Properties.Resources.SE2),new(Properties.Resources.SE3),
+            new (Properties.Resources.SE4), new(Properties.Resources.SE5), new(Properties.Resources.SE6),new(Properties.Resources.SE7),
+            new (Properties.Resources.SE8), new(Properties.Resources.SE9), new(Properties.Resources.SE10),new(Properties.Resources.SE11)
+        };
+        static WaveOut[] SEs = new WaveOut[seStreams.Length].Select(s => s = new()).ToArray();
+
+        public SoundEffect()
+        {
+            for (int i = 0; i < SEs.Length; ++i) SEs[i].Init(seStreams[i]);
+        }
+
+        public void Play(int effectID)
+        {
+            seStreams[effectID].Position = 0;
+            SEs[effectID].Play();
+        }
+    }
+
 }

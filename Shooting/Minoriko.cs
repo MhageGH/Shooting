@@ -16,17 +16,15 @@ namespace Shooting
         bool shootable = false;
         int shootTime = 0;
         List<Shot> shots;
-        WaveStream[] soundEffectStreams;
-        WaveOut[] soundEffects;
+        SoundEffect soundEffect;
         Animation animation = new();
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
 
-        public Minoriko(List<Shot> shots, WaveStream[] soundEffectStreams, WaveOut[] soundEffects)
+        public Minoriko(List<Shot> shots, SoundEffect soundEffect)
         {
             this.shots = shots;
-            this.soundEffectStreams = soundEffectStreams;
-            this.soundEffects = soundEffects;
+            this.soundEffect = soundEffect;
         }
 
         public void Progress()
@@ -76,8 +74,7 @@ namespace Shooting
                     {
                         shots.Add(new Shot(new(position.X + 10, position.Y)));
                         shots.Add(new Shot(new(position.X - 10, position.Y)));
-                        soundEffectStreams[4].Position = 0;
-                        soundEffects[4].Play();
+                        soundEffect.Play(4);
                     }
                     shootTime = 0;
                 }

@@ -15,7 +15,7 @@ namespace Shooting
         static public float[] radii = new float[] { 4, 2, 3, 13, 3, 3, 2, 2 };
         readonly int imageID = 0;
         readonly int actID = 0;
-        readonly bool rotable = false;  // 速度の方向に向くように回転するか否か
+        readonly bool rotatable = false;  // 速度の方向に向くように回転するか否か
         Vector2 speed = new();
         public Vector2 position = new();
         public bool enable = true;
@@ -24,7 +24,7 @@ namespace Shooting
         {
             this.imageID = imageID;
             this.actID = actID;
-            this.rotable = rotable;
+            this.rotatable = rotable;
             this.position = initial_position;
             this.speed = initial_speed;
         }
@@ -56,7 +56,7 @@ namespace Shooting
         {
             // 画像の中心がpositionとなるように描画
             var image = images[imageID];    
-            if (rotable)
+            if (rotatable)
             {
                 var angle = -Math.Atan2(speed.X, speed.Y);
                 float x = image.Width / 2, y = image.Height / 2, c = (float)Math.Cos(angle), s = (float)Math.Sin(angle);

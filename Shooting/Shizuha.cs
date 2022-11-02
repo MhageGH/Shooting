@@ -14,15 +14,13 @@ namespace Shooting
         Animation animation = new();
         Mover mover = new();
         Attacker attacker = new();
-        WaveStream[] soundEffectStreams;
-        WaveOut[] soundEffects;
+        SoundEffect soundEffect;
 
 
-        public Shizuha(Minoriko minoriko, WaveStream[] soundEffectStreams, WaveOut[] soundEffecs)
+        public Shizuha(Minoriko minoriko, SoundEffect soundEffect)
         {
             this.minoriko = minoriko;
-            this.soundEffectStreams = soundEffectStreams;
-            this.soundEffects = soundEffecs;
+            this.soundEffect = soundEffect;
         }
 
         public void Progress()
@@ -31,11 +29,7 @@ namespace Shooting
             switch (state)
             {
                 case 0:
-                    if (mover.time == 0)
-                    {
-                        soundEffectStreams[11].Position = 0;
-                        soundEffects[11].Play();    // 溜め効果音
-                    }
+                    if (mover.time == 0) soundEffect.Play(11);    // 溜め効果音
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
