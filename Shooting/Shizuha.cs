@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using NAudio.Wave;
 using System.Numerics;
 
 namespace Shooting
@@ -12,12 +13,16 @@ namespace Shooting
         public bool spellEnable;
         Animation animation = new();
         Mover mover = new();
-        Atacker atacker = new();
+        Attacker attacker = new();
+        WaveStream[] soundEffectStreams;
+        WaveOut[] soundEffects;
 
 
-        public Shizuha(Minoriko minoriko)
+        public Shizuha(Minoriko minoriko, WaveStream[] soundEffectStreams, WaveOut[] soundEffecs)
         {
             this.minoriko = minoriko;
+            this.soundEffectStreams = soundEffectStreams;
+            this.soundEffects = soundEffecs;
         }
 
         public void Progress()
@@ -26,13 +31,19 @@ namespace Shooting
             switch (state)
             {
                 case 0:
-                    if (mover.Move0(ref position) == true) state = 1;
+                    if (mover.time == 0)
+                    {
+                        soundEffectStreams[11].Position = 0;
+                        soundEffects[11].Play();    // 溜め効果音
+                    }
+                    if (mover.Move0(ref position) == true)
+                    {
+                        mover.time = 0;
+                        state = 1;
+                    }
                     break;
                 case 1:
-                    mover.Reset();
-                    state = 2;
-                    break;
-                case 2:
+                    attacker.Attack0();
                     mover.Move1(ref position, minoriko.position);
                     break;
             }
@@ -76,18 +87,10 @@ namespace Shooting
 
         class Mover
         {
-            int time = 0;
+            public int time = 0;
             int endOfTime = 0;
             const float speed_norm = 4;
             public Vector2 speed = new(0, 0);
-
-            /// <summary>
-            /// 新しい移動開始時に行う時間のリセット
-            /// </summary>
-            public void Reset()
-            {
-                time = 0;
-            }
 
             /// <summary>
             /// 一定速度で初期位置に戻り、一定時間経過後trueを返す
@@ -135,7 +138,7 @@ namespace Shooting
             }
         }
 
-        class Atacker
+        class Attacker
         {
             const int start_time = 120;
             int time = 0;

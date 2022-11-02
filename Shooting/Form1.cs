@@ -17,7 +17,7 @@ namespace Shooting
         static List<Shot> shots = new ();
         static BackGround backGround = new();
         static Minoriko minoriko = new(shots, soundEffectStreams, soundEffects);
-        static Shizuha shizuha = new(minoriko);
+        static Shizuha shizuha = new(minoriko, soundEffectStreams, soundEffects);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
 
         public Form1()

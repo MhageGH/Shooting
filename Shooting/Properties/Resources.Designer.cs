@@ -93,6 +93,16 @@ namespace Shooting.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Bullet0 {
+            get {
+                object obj = ResourceManager.GetObject("Bullet0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap Bullet1 {
             get {
                 object obj = ResourceManager.GetObject("Bullet1", resourceCulture);
