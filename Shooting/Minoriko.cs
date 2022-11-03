@@ -29,6 +29,7 @@ namespace Shooting
 
         public void Progress()
         {
+            animation.Progress();
             if (comeback)
             {
                 shootable = false;

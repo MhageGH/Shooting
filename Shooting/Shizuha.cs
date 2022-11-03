@@ -40,7 +40,7 @@ namespace Shooting
                     break;
                 case 1:
                     mover.Move1(ref position, minoriko.position);
-                    attacker.Attack0(position, minoriko.position);
+                    attacker.Attack3(position, minoriko.position);
                     break;
             }
         }
@@ -149,20 +149,20 @@ namespace Shooting
             public void Attack0(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time < 200)
+                if (time < 100)
                 {
                     bulletMaker.Make(source_position, target_position, 0);
                     bulletMaker.Make(source_position, target_position, 1);
                     bulletMaker.Make(source_position, target_position, 2);
                     bulletMaker.time++;
                 }
-                if (++time >= 300) time = 0;
+                if (++time >= 150) time = 0;
             }
 
             public void Attack1(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 100)
+                if (time++ >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 3);
                     bulletMaker.Make(source_position, target_position, 4);
@@ -176,7 +176,7 @@ namespace Shooting
             public void Attack2(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 100)
+                if (time++ >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 8);
                     bulletMaker.Make(source_position, target_position, 9);
@@ -187,7 +187,7 @@ namespace Shooting
             public void Attack3(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 100)
+                if (time++ >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 10);
                     bulletMaker.Make(source_position, target_position, 11);

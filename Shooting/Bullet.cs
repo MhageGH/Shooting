@@ -44,7 +44,7 @@ namespace Shooting
             }
             else if (actID == 2)    // 重力加速度運動
             {
-                const float G = 0.1f;
+                const float G = 0.15f;
                 speed.Y += G;
                 position += speed;
             }
