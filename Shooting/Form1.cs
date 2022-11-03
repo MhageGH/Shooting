@@ -43,9 +43,11 @@ namespace Shooting
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
-            foreach (var shootingObject in shootingObjects) shootingObject.Draw(e.Graphics);
+            backGround.Draw(e.Graphics);
             foreach (var shot in shots) shot.Draw(e.Graphics);
             foreach (var bullet in bullets) bullet.Draw(e.Graphics);
+            minoriko.Draw(e.Graphics);
+            shizuha.Draw(e.Graphics);
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
         }
     }

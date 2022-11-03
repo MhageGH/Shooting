@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using NAudio.Wave;
 using System.Numerics;
+using System.Windows.Media.Animation;
 
 namespace Shooting
 {
@@ -40,7 +41,70 @@ namespace Shooting
                     break;
                 case 1:
                     mover.Move1(ref position, minoriko.position);
+                    attacker.Attack0(position, minoriko.position);
+                    if (attacker.time >= 200)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 2;
+                    }
+                    break;
+                case 2:
+                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.Move0(ref position) == true)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 3;
+                    }
+                    break;
+                case 3:
+                    mover.Move1(ref position, minoriko.position);
+                    attacker.Attack1(position, minoriko.position);
+                    if (attacker.time >= 200)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 4;
+                    }
+                    break;
+                case 4:
+                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.Move0(ref position) == true)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 5;
+                    }
+                    break;
+                case 5:
+                    mover.Move1(ref position, minoriko.position);
+                    attacker.Attack2(position, minoriko.position);
+                    if (attacker.time >= 200)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 6;
+                    }
+                    break;
+                case 6:
+                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.Move0(ref position) == true)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 7;
+                    }
+                    break;
+                case 7:
+                    mover.Move1(ref position, minoriko.position);
                     attacker.Attack3(position, minoriko.position);
+                    if (attacker.time >= 200)
+                    {
+                        mover.time = 0;
+                        attacker.time = 0;
+                        state = 8;
+                    }
                     break;
             }
         }
@@ -114,7 +178,7 @@ namespace Shooting
                 const int endOfTime_max = 25;
                 int x_min = (int)BackGround.position.X + 100;
                 int x_max = (int)BackGround.position.X + BackGround.screen_size.Width - 100;
-                int y_min = 80;
+                int y_min = 100;
                 int y_max = 150;
                 if (time == 0)
                 {
@@ -149,14 +213,13 @@ namespace Shooting
             public void Attack0(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time < 100)
+                if (++time % 150 < 100)
                 {
                     bulletMaker.Make(source_position, target_position, 0);
                     bulletMaker.Make(source_position, target_position, 1);
                     bulletMaker.Make(source_position, target_position, 2);
                     bulletMaker.time++;
                 }
-                if (++time >= 150) time = 0;
             }
 
             public void Attack1(Vector2 source_position, Vector2 target_position)

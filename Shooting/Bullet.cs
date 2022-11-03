@@ -37,7 +37,7 @@ namespace Shooting
             }
             else if (actID == 1)    // 等加速度直線運動
             {
-                const float acceleration = 0.02f;
+                const float acceleration = 0.03f;
                 float speed_norm = speed.Length();
                 speed = (speed_norm + acceleration) * (speed / speed_norm);
                 position += speed;
