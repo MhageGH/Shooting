@@ -7,24 +7,35 @@ namespace Shooting
     internal class Minoriko : ShootingObject
     {
         static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
-        static int initial_life = 3;
         static float high_speed = 4;
         static float low_speed = 2;
-        bool comeback = true;
-        bool invincible = false;
         int comebackTime = 0;
         bool shootable = false;
+        bool comeback = true;
         int shootTime = 0;
         List<Shot> shots;
         SoundEffect soundEffect;
         Animation animation = new();
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
+        public readonly float radius = 3;
+        public int life = 3;
+        public bool invincible = false;
 
         public Minoriko(List<Shot> shots, SoundEffect soundEffect)
         {
             this.shots = shots;
             this.soundEffect = soundEffect;
+        }
+
+        public void Die()
+        {
+            comeback = true;
+            invincible = true;
+            shootable = false;
+            life--;
+            position = new(initial_position.X, initial_position.Y);
+            soundEffect.Play(0);
         }
 
         public void Progress()
@@ -44,7 +55,7 @@ namespace Shooting
             }
             if (invincible)
             {
-                if (++comebackTime >= 60)
+                if (++comebackTime >= 100)
                 {
                     invincible = false;
                     comebackTime = 0;

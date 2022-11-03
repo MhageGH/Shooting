@@ -10,7 +10,7 @@ namespace Shooting
         int state = 0;
         Minoriko minoriko;
         static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, 100);
-        public Vector2 position = initial_position + new Vector2(200, 200);
+        public Vector2 position = initial_position;
         public bool spellEnable;
         Animation animation = new();
         Mover mover = new();

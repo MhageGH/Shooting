@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Windows;
 
 namespace Shooting
 {
@@ -12,13 +13,15 @@ namespace Shooting
             Properties.Resources.Bullet0, Properties.Resources.Bullet1, Properties.Resources.Bullet2, Properties.Resources.Bullet3,
             Properties.Resources.Bullet4, Properties.Resources.Bullet5, Properties.Resources.Bullet6, Properties.Resources.Bullet7
         };
-        static public float[] radii = new float[] { 4, 2, 3, 13, 3, 3, 2, 2 };
+        static float[] radii = new float[] { 4, 2, 3, 13, 3, 3, 2, 2 };
         readonly int imageID = 0;
         readonly int actID = 0;
         readonly bool rotatable = false;  // 速度の方向に向くように回転するか否か
         Vector2 speed = new();
+
         public Vector2 position = new();
         public bool enable = true;
+        public readonly float radius;
 
         public Bullet(int imageID, int actID, bool rotable, Vector2 initial_position, Vector2 initial_speed)
         {
@@ -27,6 +30,7 @@ namespace Shooting
             this.rotatable = rotable;
             this.position = initial_position;
             this.speed = initial_speed;
+            this.radius = radii[actID];
         }
 
         public void Progress()

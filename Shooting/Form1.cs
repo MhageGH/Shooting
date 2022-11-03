@@ -36,7 +36,22 @@ namespace Shooting
             foreach (var shootingObject in shootingObjects) shootingObject.Progress();
             foreach (var shot in shots) shot.Progress();
             shots.RemoveAll(s => s.enable == false);
-            foreach (var bullet in bullets) bullet.Progress();
+            foreach(var bullet in bullets)
+            {
+                bullet.Progress();
+                var p = bullet.position - minoriko.position;
+                if (p.Length() < bullet.radius + minoriko.radius && !minoriko.invincible)
+                {
+                    foreach (var b in bullets) b.enable = false;
+                    minoriko.Die();
+                    if (minoriko.life == 0)
+                    {
+                        timer1.Stop();
+                        MessageBox.Show("Gameover");
+                    }
+                    break;
+                }
+            }
             bullets.RemoveAll(b => b.enable == false);
         }
 
