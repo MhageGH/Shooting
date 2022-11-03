@@ -34,6 +34,7 @@ namespace Shooting
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
+                        attacker.time = 0;
                         state = 1;
                     }
                     break;
@@ -76,7 +77,8 @@ namespace Shooting
                 trimNumber.y = 0;
                 if (speed.X > 0) trimNumber.y = 1;
                 if (speed.X < 0) trimNumber.y = 2;
-                graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
+                graphics.DrawImage(image, new Rectangle((int)position.X - width / 2, (int)position.Y - height / 2, width, height), 
+                    trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
             }
         }
 
@@ -119,10 +121,10 @@ namespace Shooting
                     var direction = new Vector2();
                     var rand = new Random();
                     endOfTime = (int)((endOfTime_max - endOfTime_min) * rand.NextSingle() + endOfTime_min);
-                    var theta = (Math.PI / 2) * (rand.NextDouble() - 0.5);
-                    var cos = (float)Math.Cos(theta);
-                    var sin = (float)Math.Sin(theta);
-                    var asin = (float)Math.Abs(sin);
+                    var theta = (MathF.PI / 2) * (rand.NextSingle() - 0.5f);
+                    var cos = MathF.Cos(theta);
+                    var sin = MathF.Sin(theta);
+                    var asin = MathF.Abs(sin);
                     direction.X = ((minoriko_position.X - position.X >= 0 && position.X < x_max) || position.X < x_min) ? cos : -cos;
                     direction.Y = (position.Y < y_min) ? asin : (position.Y > y_max) ? -asin : sin;
                     speed = speed_norm * direction;
@@ -136,32 +138,61 @@ namespace Shooting
         class Attacker
         {
             const int start_time = 120;
-            int time = 0;
+            public int time = 0;
             BulletMaker bulletMaker;
 
             public Attacker(List<Bullet> bullets)
             {
-                bulletMaker = new BulletMaker(0, bullets);
+                bulletMaker = new BulletMaker(bullets);
             }
 
             public void Attack0(Vector2 source_position, Vector2 target_position)
             {
-                bulletMaker.Make(source_position, target_position);
+                if (time == 0) bulletMaker.time = 0;
+                if (time < 200)
+                {
+                    bulletMaker.Make(source_position, target_position, 0);
+                    bulletMaker.Make(source_position, target_position, 1);
+                    bulletMaker.Make(source_position, target_position, 2);
+                    bulletMaker.time++;
+                }
+                if (++time >= 300) time = 0;
             }
 
-            public void Attack1()
+            public void Attack1(Vector2 source_position, Vector2 target_position)
             {
-                // TODO
+                if (time == 0) bulletMaker.time = 0;
+                if (time++ >= 100)
+                {
+                    bulletMaker.Make(source_position, target_position, 3);
+                    bulletMaker.Make(source_position, target_position, 4);
+                    bulletMaker.Make(source_position, target_position, 5);
+                    bulletMaker.Make(source_position, target_position, 6);
+                    bulletMaker.Make(source_position, target_position, 7);
+                    bulletMaker.time++;
+                }
             }
 
-            public void Attack2()
+            public void Attack2(Vector2 source_position, Vector2 target_position)
             {
-                // TODO
+                if (time == 0) bulletMaker.time = 0;
+                if (time++ >= 100)
+                {
+                    bulletMaker.Make(source_position, target_position, 8);
+                    bulletMaker.Make(source_position, target_position, 9);
+                    bulletMaker.time++;
+                }
             }
 
-            public void Attack3()
+            public void Attack3(Vector2 source_position, Vector2 target_position)
             {
-                // TODO
+                if (time == 0) bulletMaker.time = 0;
+                if (time++ >= 100)
+                {
+                    bulletMaker.Make(source_position, target_position, 10);
+                    bulletMaker.Make(source_position, target_position, 11);
+                    bulletMaker.time++;
+                }
             }
         }
     }

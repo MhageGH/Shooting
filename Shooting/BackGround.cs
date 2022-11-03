@@ -114,7 +114,7 @@ namespace Shooting
                     pos.Y = trimHeight * random.NextSingle();
                     for (int i = 0; i < angles.Length; i++)
                     {
-                        angles[i] = 2.0f * (float)Math.PI * random.NextSingle();
+                        angles[i] = 2.0f * MathF.PI * random.NextSingle();
                         angular_speeds[i] = max_angular_speed * random.NextSingle();
                     }
                 }
@@ -122,7 +122,7 @@ namespace Shooting
                 public void Progress()
                 {
                     pos.Y = (pos.Y + speed) % (BackGround.position.Y + BackGround.screen_size.Height);
-                    for (int j = 0; j < angles.Length; j++) angles[j] = (angles[j] + angular_speeds[j]) % (2 * (float)Math.PI);
+                    for (int j = 0; j < angles.Length; j++) angles[j] = (angles[j] + angular_speeds[j]) % (2 * MathF.PI);
                 }
 
                 public void Draw(Graphics g)
@@ -147,13 +147,13 @@ namespace Shooting
                     var p0 = point - center;
                     Point3f p1, p2, p3;
                     p1.X = p0.X;
-                    p1.Y = p0.Y * (float)Math.Cos(angleX) - p0.Z * (float)Math.Sin(angleX);
-                    p1.Z = p0.Y * (float)Math.Sin(angleX) + p0.Z * (float)Math.Cos(angleX);
-                    p2.X = p1.Z * (float)Math.Sin(angleY) + p1.X * (float)Math.Cos(angleY);
+                    p1.Y = p0.Y * MathF.Cos(angleX) - p0.Z * MathF.Sin(angleX);
+                    p1.Z = p0.Y * MathF.Sin(angleX) + p0.Z * MathF.Cos(angleX);
+                    p2.X = p1.Z * MathF.Sin(angleY) + p1.X * MathF.Cos(angleY);
                     p2.Y = p1.Y;
-                    p2.Z = p1.Z * (float)Math.Cos(angleY) - p1.X * (float)Math.Sin(angleY);
-                    p3.X = p2.X * (float)Math.Cos(angleZ) - p2.Y * (float)Math.Sin(angleZ);
-                    p3.Y = p2.X * (float)Math.Sin(angleZ) + p2.Y * (float)Math.Cos(angleZ);
+                    p2.Z = p1.Z * MathF.Cos(angleY) - p1.X * MathF.Sin(angleY);
+                    p3.X = p2.X * MathF.Cos(angleZ) - p2.Y * MathF.Sin(angleZ);
+                    p3.Y = p2.X * MathF.Sin(angleZ) + p2.Y * MathF.Cos(angleZ);
                     p3.Z = p2.Z;
                     return p3 + center;
                 }

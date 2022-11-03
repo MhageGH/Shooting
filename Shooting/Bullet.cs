@@ -58,8 +58,8 @@ namespace Shooting
             var image = images[imageID];    
             if (rotatable)
             {
-                var angle = -Math.Atan2(speed.X, speed.Y);
-                float x = image.Width / 2, y = image.Height / 2, c = (float)Math.Cos(angle), s = (float)Math.Sin(angle);
+                var angle = -MathF.Atan2(speed.X, speed.Y);
+                float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
                 var ps = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
                 graphics.DrawImage(image, ps.Select(p => (PointF)(p + position)).ToArray());
             }

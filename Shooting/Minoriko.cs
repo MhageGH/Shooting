@@ -112,7 +112,8 @@ namespace Shooting
             {
                 trimNumber.x = time / interval;
                 if (!invincible || comebackTime % 4 < 2)    // 無敵時間は点滅
-                    graphics.DrawImage(image, new Rectangle((int)position.X, (int)position.Y, width, height), trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
+                    graphics.DrawImage(image, new Rectangle((int)position.X - width / 2, (int)position.Y - height / 2, width, height),
+                        trimRects[trimNumber.x, trimNumber.y], GraphicsUnit.Pixel);
             }
         }
     }
