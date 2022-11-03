@@ -10,9 +10,10 @@ namespace Shooting
         static WaveOut bgm = new();
         static SoundEffect soundEffect = new();
         static List<Shot> shots = new ();
+        static List<Bullet> bullets = new();
         static BackGround backGround = new();
         static Minoriko minoriko = new(shots, soundEffect);
-        static Shizuha shizuha = new(minoriko, soundEffect);
+        static Shizuha shizuha = new(minoriko, soundEffect, bullets);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
 
         public Form1()
@@ -20,7 +21,7 @@ namespace Shooting
             InitializeComponent();
             backGround.SpellEnable = false;
             bgm.Init(bgmStream);
-            bgm.Volume = 0.5f; // NAudioのボリュームはstaticクラスに結びついているため全WaveOutオブジェクトに適用される。個別の音量調整は出来ない。予め比率を調整しておく。
+            bgm.Volume = 0.5f; // NAudioのボリュームはstaticクラスに結びついているため全WaveOutオブジェクトに適用される。個別の音量調整は出来ない。音源の方で予め比率を調整しておく。
             bgm.Play();
         }
 
@@ -35,6 +36,8 @@ namespace Shooting
             foreach (var shootingObject in shootingObjects) shootingObject.Progress();
             foreach (var shot in shots) shot.Progress();
             shots.RemoveAll(s => s.enable == false);
+            foreach (var bullet in bullets) bullet.Progress();
+            bullets.RemoveAll(b => b.enable == false);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -42,6 +45,7 @@ namespace Shooting
             // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
             foreach (var shootingObject in shootingObjects) shootingObject.Draw(e.Graphics);
             foreach (var shot in shots) shot.Draw(e.Graphics);
+            foreach (var bullet in bullets) bullet.Draw(e.Graphics);
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
         }
     }
@@ -60,11 +64,15 @@ namespace Shooting
             new (Properties.Resources.SE4), new(Properties.Resources.SE5), new(Properties.Resources.SE6),new(Properties.Resources.SE7),
             new (Properties.Resources.SE8), new(Properties.Resources.SE9), new(Properties.Resources.SE10),new(Properties.Resources.SE11)
         };
-        static WaveOut[] SEs = new WaveOut[seStreams.Length].Select(s => s = new()).ToArray();
+        static WaveOut[] SEs = new WaveOut[seStreams.Length];
 
         public SoundEffect()
         {
-            for (int i = 0; i < SEs.Length; ++i) SEs[i].Init(seStreams[i]);
+            for (int i = 0; i < SEs.Length; ++i)
+            {
+                SEs[i] = new();
+                SEs[i].Init(seStreams[i]);
+            }
         }
 
         public void Play(int effectID)

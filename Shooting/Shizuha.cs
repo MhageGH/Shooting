@@ -13,14 +13,15 @@ namespace Shooting
         public bool spellEnable;
         Animation animation = new();
         Mover mover = new();
-        Attacker attacker = new();
+        Attacker attacker;
         SoundEffect soundEffect;
 
 
-        public Shizuha(Minoriko minoriko, SoundEffect soundEffect)
+        public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets)
         {
             this.minoriko = minoriko;
             this.soundEffect = soundEffect;
+            attacker = new Attacker(bullets);
         }
 
         public void Progress()
@@ -37,8 +38,8 @@ namespace Shooting
                     }
                     break;
                 case 1:
-                    attacker.Attack0();
                     mover.Move1(ref position, minoriko.position);
+                    attacker.Attack0(position, minoriko.position);
                     break;
             }
         }
@@ -136,10 +137,16 @@ namespace Shooting
         {
             const int start_time = 120;
             int time = 0;
+            BulletMaker bulletMaker;
 
-            public void Attack0()
+            public Attacker(List<Bullet> bullets)
             {
-                // TODO
+                bulletMaker = new BulletMaker(0, bullets);
+            }
+
+            public void Attack0(Vector2 source_position, Vector2 target_position)
+            {
+                bulletMaker.Make(source_position, target_position);
             }
 
             public void Attack1()
