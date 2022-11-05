@@ -12,6 +12,7 @@ namespace Shooting
         int comebackTime = 0;
         bool shootable = false;
         bool comeback = true;
+        bool enable = true;
         int shootTime = 0;
         List<Shot> shots;
         SoundEffect soundEffect;
@@ -19,23 +20,13 @@ namespace Shooting
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
         public readonly float radius = 3;
-        public int life = 3;
+        public int life = 1;
         public bool invincible = false;
 
         public Minoriko(List<Shot> shots, SoundEffect soundEffect)
         {
             this.shots = shots;
             this.soundEffect = soundEffect;
-        }
-
-        public void Die()
-        {
-            comeback = true;
-            invincible = true;
-            shootable = false;
-            life--;
-            position = new(initial_position.X, initial_position.Y);
-            soundEffect.Play(0);
         }
 
         public void Progress()
@@ -95,7 +86,18 @@ namespace Shooting
 
         public void Draw(Graphics graphics)
         {
-            animation.Draw(graphics, position, invincible, comebackTime);
+            if (enable) animation.Draw(graphics, position, invincible, comebackTime);
+        }
+
+        public void Die()
+        {
+            soundEffect.Play(0);
+            life--;
+            comeback = true;
+            invincible = true;
+            shootable = false;
+            position = new(initial_position.X, initial_position.Y);
+            if (life == 0) enable = false;
         }
 
         class Animation

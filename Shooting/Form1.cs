@@ -27,28 +27,23 @@ namespace Shooting
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            Invalidate();
             if (bgmStream.Position == bgmStream.Length)
             {
                 bgmStream.Position = 0;
                 bgm.Play();
             }
-            Invalidate();
+            if (minoriko.life == 0) return;
             foreach (var shootingObject in shootingObjects) shootingObject.Progress();
             foreach (var shot in shots) shot.Progress();
             shots.RemoveAll(s => s.enable == false);
             foreach(var bullet in bullets)
             {
                 bullet.Progress();
-                var p = bullet.position - minoriko.position;
-                if (p.Length() < bullet.radius + minoriko.radius && !minoriko.invincible)
+                if ((bullet.position - minoriko.position).Length() < bullet.radius + minoriko.radius && !minoriko.invincible)
                 {
                     foreach (var b in bullets) b.enable = false;
                     minoriko.Die();
-                    if (minoriko.life == 0)
-                    {
-                        timer1.Stop();
-                        MessageBox.Show("Gameover");
-                    }
                     break;
                 }
             }
@@ -64,6 +59,13 @@ namespace Shooting
             minoriko.Draw(e.Graphics);
             shizuha.Draw(e.Graphics);
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
+            if (minoriko.life == 0)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), 
+                    BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
+                e.Graphics.DrawString("Game Over", new Font("メイリオ", 20), Brushes.White, 150, 220);
+                return;
+            }
         }
     }
 
