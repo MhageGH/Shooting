@@ -33,9 +33,18 @@ namespace Shooting
                 bgmStream.Position = 0;
                 bgm.Play();
             }
-            if (minoriko.life == 0) return;
+            if (minoriko.life == 0 || shizuha.gameClear ) return;
             foreach (var shootingObject in shootingObjects) shootingObject.Progress();
-            foreach (var shot in shots) shot.Progress();
+            foreach (var shot in shots)
+            {
+                shot.Progress();
+                if ((shot.position - shizuha.position).Length() < shot.radius + shizuha.radius)
+                {
+                    shot.enable = false;
+                    shizuha.power--;
+                    break;
+                }
+            }
             shots.RemoveAll(s => s.enable == false);
             foreach(var bullet in bullets)
             {
@@ -57,13 +66,20 @@ namespace Shooting
             foreach (var shot in shots) shot.Draw(e.Graphics);
             foreach (var bullet in bullets) bullet.Draw(e.Graphics);
             minoriko.Draw(e.Graphics);
-            shizuha.Draw(e.Graphics);
+            if (shizuha.enable) shizuha.Draw(e.Graphics);
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
             if (minoriko.life == 0)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), 
                     BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
                 e.Graphics.DrawString("Game Over", new Font("メイリオ", 20), Brushes.White, 150, 220);
+                return;
+            }
+            if (shizuha.gameClear)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)),
+                    BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
+                e.Graphics.DrawString("Game Clear!", new Font("メイリオ", 20), Brushes.Gold, 150, 220);
                 return;
             }
         }

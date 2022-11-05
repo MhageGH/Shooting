@@ -20,7 +20,7 @@ namespace Shooting
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
         public readonly float radius = 3;
-        public int life = 1;
+        public int life = 3;
         public bool invincible = false;
 
         public Minoriko(List<Shot> shots, SoundEffect soundEffect)

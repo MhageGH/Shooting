@@ -10,18 +10,24 @@ namespace Shooting
         int state = 0;
         Minoriko minoriko;
         static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, 100);
-        public Vector2 position = initial_position;
-        public bool spellEnable;
         Animation animation = new();
         Mover mover = new();
         Attacker attacker;
         SoundEffect soundEffect;
+        List<Bullet> bullets;
 
+        public float radius = 20;
+        public Vector2 position = initial_position;
+        public bool spellCard = false;
+        public int power = 0;
+        public bool gameClear = false;
+        public bool enable = true;
 
         public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets)
         {
             this.minoriko = minoriko;
             this.soundEffect = soundEffect;
+            this.bullets = bullets;
             attacker = new Attacker(bullets);
         }
 
@@ -36,16 +42,18 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        power = 10;
                         state = 1;
                     }
                     break;
                 case 1:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack0(position, minoriko.position);
-                    if (attacker.time >= 200)
+                    if (power <= 0)
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        power = 10;
                         state = 2;
                     }
                     break;
@@ -61,10 +69,11 @@ namespace Shooting
                 case 3:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack1(position, minoriko.position);
-                    if (attacker.time >= 200)
+                    if (power <= 0)
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        power = 10;
                         state = 4;
                     }
                     break;
@@ -80,10 +89,11 @@ namespace Shooting
                 case 5:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack2(position, minoriko.position);
-                    if (attacker.time >= 200)
+                    if (power <= 0)
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        power = 10;
                         state = 6;
                     }
                     break;
@@ -99,12 +109,17 @@ namespace Shooting
                 case 7:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack3(position, minoriko.position);
-                    if (attacker.time >= 200)
+                    if (power <= 0)
                     {
                         mover.time = 0;
                         attacker.time = 0;
                         state = 8;
                     }
+                    break;
+                case 8:
+                    gameClear = true;
+                    foreach (var bullet in bullets) bullet.enable = false;
+                    enable = false;
                     break;
             }
         }

@@ -6,9 +6,9 @@ namespace Shooting
     {
         static Image image = Properties.Resources.Shot;
         static int speed = 20;
-        static float radius = 10;
         static int effectID = 0;
         public Vector2 position;
+        public float radius = 10;
         public bool enable = true;
 
         public Shot(Vector2 position)
