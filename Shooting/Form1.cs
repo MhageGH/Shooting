@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Shooting
 {
@@ -15,6 +16,11 @@ namespace Shooting
         static Minoriko minoriko = new(shots, soundEffect);
         static Shizuha shizuha = new(minoriko, soundEffect, bullets);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
+        Image imageStar = Properties.Resources.Star;
+        Image imagePowerBar = Properties.Resources.PowerBar;
+        Image imageShizuhaName = Properties.Resources.ShizuhaName;
+        bool pause = false;
+        int keyDeadTime = 0;
 
         public Form1()
         {
@@ -34,6 +40,23 @@ namespace Shooting
                 bgm.Play();
             }
             if (minoriko.life == 0 || shizuha.gameClear ) return;
+            if (keyDeadTime > 0) keyDeadTime--;
+            if (Keyboard.IsKeyDown(Key.Escape) && keyDeadTime == 0)
+            {
+                if (pause)
+                {
+                    pause = false;
+                    keyDeadTime = 10;
+                }
+                else
+                {
+                    pause = true;
+                    keyDeadTime = 10;
+                    soundEffect.Play(3);
+                }
+                return;
+            }
+            if (pause) return;
             foreach (var shootingObject in shootingObjects) shootingObject.Progress();
             foreach (var shot in shots)
             {
@@ -41,7 +64,7 @@ namespace Shooting
                 if ((shot.position - shizuha.position).Length() < shot.radius + shizuha.radius)
                 {
                     shot.enable = false;
-                    shizuha.power--;
+                    shizuha.ReceiveDamage();
                     break;
                 }
             }
@@ -66,8 +89,15 @@ namespace Shooting
             foreach (var shot in shots) shot.Draw(e.Graphics);
             foreach (var bullet in bullets) bullet.Draw(e.Graphics);
             minoriko.Draw(e.Graphics);
-            if (shizuha.enable) shizuha.Draw(e.Graphics);
+            if (shizuha.enable)
+            {
+                shizuha.Draw(e.Graphics);
+                e.Graphics.DrawImage(imageShizuhaName, 45, 16, imageShizuhaName.Width, imageShizuhaName.Height);
+                e.Graphics.DrawImage(imagePowerBar, new Rectangle(45, 31, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height),
+                    new Rectangle(0, 0, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height), GraphicsUnit.Pixel);
+            }
             e.Graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
+            for (int i = 0; i < minoriko.life - 1; ++i) e.Graphics.DrawImage(imageStar, 515 + 15 * i, 108, imageStar.Width, imageStar.Height);
             if (minoriko.life == 0)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), 
@@ -77,9 +107,16 @@ namespace Shooting
             }
             if (shizuha.gameClear)
             {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 128, 128, 128)),
+                    BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
+                e.Graphics.DrawString("Game Clear!", new Font("メイリオ", 35), Brushes.Gold, 80, 200);
+                return;
+            }
+            if (pause)
+            {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)),
                     BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
-                e.Graphics.DrawString("Game Clear!", new Font("メイリオ", 20), Brushes.Gold, 150, 220);
+                e.Graphics.DrawString("Pause", new Font("メイリオ", 20), Brushes.White, 180, 220);
                 return;
             }
         }

@@ -19,7 +19,8 @@ namespace Shooting
         public float radius = 20;
         public Vector2 position = initial_position;
         public bool spellCard = false;
-        public int power = 0;
+        public int power_max = 50;
+        public int power = 50;
         public bool gameClear = false;
         public bool enable = true;
 
@@ -42,7 +43,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power = 10;
+                        power_max = power = 50;
                         state = 1;
                     }
                     break;
@@ -53,7 +54,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power = 10;
+                        power_max = power = 50;
                         state = 2;
                     }
                     break;
@@ -73,7 +74,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power = 10;
+                        power_max = power = 50;
                         state = 4;
                     }
                     break;
@@ -93,7 +94,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power = 10;
+                        power_max = power = 50;
                         state = 6;
                     }
                     break;
@@ -117,6 +118,7 @@ namespace Shooting
                     }
                     break;
                 case 8:
+                    if (enable) soundEffect.Play(6);
                     gameClear = true;
                     foreach (var bullet in bullets) bullet.enable = false;
                     enable = false;
@@ -127,6 +129,12 @@ namespace Shooting
         public void Draw(Graphics graphics)
         {
             animation.Draw(graphics, position, mover.speed);
+        }
+
+        public void ReceiveDamage()
+        {
+            power--;
+            soundEffect.Play(5);
         }
 
         class Animation

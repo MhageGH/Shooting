@@ -7,8 +7,8 @@ namespace Shooting
     internal class Minoriko : ShootingObject
     {
         static Vector2 initial_position = new(BackGround.position.X + BackGround.screen_size.Width / 2, BackGround.position.Y + BackGround.screen_size.Height);
-        static float high_speed = 4;
-        static float low_speed = 2;
+        static float high_speed = 8;
+        static float low_speed = 4;
         int comebackTime = 0;
         bool shootable = false;
         bool comeback = true;
@@ -55,19 +55,21 @@ namespace Shooting
 
             animation.trimNumber.y = 0;
             float speed = high_speed;
+            const int margin = 20;
             if (Keyboard.IsKeyDown(Key.LeftShift)) speed = low_speed;   // プロジェクトのプロパティでWPFを有効にすることでKeyboardクラスが使える
             if (Keyboard.IsKeyDown(Key.Right))
             {
+                if (position.X < BackGround.position.X + BackGround.screen_size.Width - margin)
                 position.X += speed;
                 animation.trimNumber.y = 1;
             }
             if (Keyboard.IsKeyDown(Key.Left))
             {
-                position.X -= speed;
+                if (position.X > BackGround.position.X + margin) position.X -= speed;
                 animation.trimNumber.y = 2;
             }
-            if (Keyboard.IsKeyDown(Key.Up)) position.Y -= speed;
-            if (Keyboard.IsKeyDown(Key.Down)) position.Y += speed;
+            if (Keyboard.IsKeyDown(Key.Up) && position.Y > BackGround.position.Y + margin) position.Y -= speed;
+            if (Keyboard.IsKeyDown(Key.Down) && position.Y < BackGround.position.Y + BackGround.screen_size.Height - margin) position.Y += speed;
 
             if (shootable)
             {
