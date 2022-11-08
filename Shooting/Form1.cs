@@ -12,9 +12,10 @@ namespace Shooting
         static SoundEffect soundEffect = new();
         static List<Shot> shots = new ();
         static List<Bullet> bullets = new();
+        static List<Effect> effects = new ();
         static BackGround backGround = new();
         static Minoriko minoriko = new(shots, soundEffect);
-        static Shizuha shizuha = new(minoriko, soundEffect, bullets);
+        static Shizuha shizuha = new(minoriko, soundEffect, bullets, effects);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
         Image imageStar = Properties.Resources.Star;
         Image imagePowerBar = Properties.Resources.PowerBar;
@@ -80,6 +81,8 @@ namespace Shooting
                 }
             }
             bullets.RemoveAll(b => b.enable == false);
+            foreach (var effect in effects) effect.Progress();
+            effects.RemoveAll(e => e.enable == false);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -88,6 +91,7 @@ namespace Shooting
             backGround.Draw(e.Graphics);
             foreach (var shot in shots) shot.Draw(e.Graphics);
             foreach (var bullet in bullets) bullet.Draw(e.Graphics);
+            foreach (var effect in effects) effect.Draw(e.Graphics);
             minoriko.Draw(e.Graphics);
             if (shizuha.enable)
             {

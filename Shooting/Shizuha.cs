@@ -15,6 +15,7 @@ namespace Shooting
         Attacker attacker;
         SoundEffect soundEffect;
         List<Bullet> bullets;
+        List<Effect> effects;
 
         public float radius = 20;
         public Vector2 position = initial_position;
@@ -24,11 +25,12 @@ namespace Shooting
         public bool gameClear = false;
         public bool enable = true;
 
-        public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets)
+        public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets, List<Effect> effects)
         {
             this.minoriko = minoriko;
             this.soundEffect = soundEffect;
             this.bullets = bullets;
+            this.effects = effects;
             attacker = new Attacker(bullets);
         }
 
@@ -135,6 +137,7 @@ namespace Shooting
         {
             power--;
             soundEffect.Play(5);
+            effects.Add(new Effect0(position));
         }
 
         class Animation
