@@ -86,9 +86,9 @@ namespace Shooting
             }
         }
 
-        public void Draw(Bitmap bitmap)
+        public void Draw(Bitmap canvas)
         {
-            var graphics = Graphics.FromImage(bitmap);
+            var graphics = Graphics.FromImage(canvas);
             if (enable) animation.Draw(graphics, position, invincible, comebackTime);
         }
 

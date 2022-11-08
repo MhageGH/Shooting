@@ -24,7 +24,21 @@ namespace Shooting
 
         public abstract void Progress();
 
-        public abstract void Draw(Bitmap bitmap);
+        public abstract void Draw(Bitmap canvas);
+
+        protected void AdditiveSynthesis(Bitmap canvas, Bitmap image, int x, int y)
+        {
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; ++j)
+                {
+                    var R = Math.Min(canvas.GetPixel(x + i, y + j).R + image.GetPixel(i, j).R, 255);
+                    var G = Math.Min(canvas.GetPixel(x + i, y + j).G + image.GetPixel(i, j).G, 255);
+                    var B = Math.Min(canvas.GetPixel(x + i, y + j).B + image.GetPixel(i, j).B, 255);
+                    canvas.SetPixel(x + i, y + j, Color.FromArgb(255, R, G, B));
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -40,21 +54,10 @@ namespace Shooting
             time++;
         }
 
-        public override void Draw(Bitmap bitmap)
+        public override void Draw(Bitmap canvas)
         {
             var image = images[0];
-            for (int i = 0; i < image.Width; i++)
-            {
-                for (int j = 0; j < image.Height; ++j)
-                {
-                    var x = (int)position.X - image.Width / 2;
-                    var y = (int)position.Y - image.Height / 2;
-                    var R = Math.Min(bitmap.GetPixel(x + i, y + j).R + image.GetPixel(i, j).R, 255);
-                    var G = Math.Min(bitmap.GetPixel(x + i, y + j).G + image.GetPixel(i, j).G, 255);
-                    var B = Math.Min(bitmap.GetPixel(x + i, y + j).B + image.GetPixel(i, j).B, 255);
-                    bitmap.SetPixel(x + i, y + j, Color.FromArgb(255, R, G, B));
-                }
-            }
+            AdditiveSynthesis(canvas, image, (int)position.X - image.Width / 2, (int)position.Y - image.Height / 2);
         }
     }
 
@@ -67,7 +70,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Bitmap bitmap)
+        public override void Draw(Bitmap canvas)
         {
 
         }
@@ -82,7 +85,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Bitmap bitmap)
+        public override void Draw(Bitmap canvas)
         {
 
         }
@@ -97,7 +100,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Bitmap bitmap)
+        public override void Draw(Bitmap canvas)
         {
 
         }
@@ -111,7 +114,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Bitmap bitmap)
+        public override void Draw(Bitmap canvas)
         {
 
         }

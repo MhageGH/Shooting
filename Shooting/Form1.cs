@@ -88,22 +88,22 @@ namespace Shooting
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             var rect = e.ClipRectangle;
-            var bitmap = new Bitmap(rect.Width, rect.Height);
-            var graphics = Graphics.FromImage(bitmap);
+            var canvas = new Bitmap(rect.Width, rect.Height);
+            var graphics = Graphics.FromImage(canvas);
 
             // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
-            backGround.Draw(bitmap);
-            foreach (var shot in shots) shot.Draw(bitmap);
-            foreach (var bullet in bullets) bullet.Draw(bitmap);
-            foreach (var effect in effects) effect.Draw(bitmap);
-            minoriko.Draw(bitmap);
+            backGround.Draw(canvas);
+            foreach (var shot in shots) shot.Draw(canvas);
+            foreach (var bullet in bullets) bullet.Draw(canvas);
+            minoriko.Draw(canvas);
             if (shizuha.enable)
             {
-                shizuha.Draw(bitmap);
+                shizuha.Draw(canvas);
                 graphics.DrawImage(imageShizuhaName, 45, 16, imageShizuhaName.Width, imageShizuhaName.Height);
                 graphics.DrawImage(imagePowerBar, new Rectangle(45, 31, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height),
                     new Rectangle(0, 0, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height), GraphicsUnit.Pixel);
             }
+            foreach (var effect in effects) effect.Draw(canvas);
             graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
             for (int i = 0; i < minoriko.life - 1; ++i) graphics.DrawImage(imageStar, 515 + 15 * i, 108, imageStar.Width, imageStar.Height);
             if (minoriko.life == 0)
@@ -124,7 +124,7 @@ namespace Shooting
                     BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
                 graphics.DrawString("Pause", new Font("メイリオ", 20), Brushes.White, 180, 220);
             }
-            e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+            e.Graphics.DrawImage(canvas, 0, 0, canvas.Width, canvas.Height);
         }
     }
 
@@ -132,7 +132,7 @@ namespace Shooting
     {
         public void Progress();
 
-        public void Draw(Bitmap bitmap);
+        public void Draw(Bitmap canvas);
     }
 
     internal class SoundEffect
