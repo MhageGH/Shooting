@@ -20,8 +20,9 @@ namespace Shooting
             else normalBackGround.Progress();
         }
 
-        public void Draw(Graphics graphics)
+        public void Draw(Bitmap bitmap)
         {
+            var graphics = Graphics.FromImage(bitmap);
             if (SpellEnable) spellBackGround.Draw(graphics);
             else normalBackGround.Draw(graphics);
         }

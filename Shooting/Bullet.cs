@@ -56,8 +56,9 @@ namespace Shooting
                 || position.Y < BackGround.position.Y || position.Y > BackGround.position.Y + BackGround.screen_size.Height) enable = false;
         }
 
-        public void Draw(Graphics graphics)
+        public void Draw(Bitmap bitmap)
         {
+            var graphics = Graphics.FromImage(bitmap);
             // 画像の中心がpositionとなるように描画
             var image = images[imageID];    
             if (rotatable)

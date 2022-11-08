@@ -22,8 +22,9 @@ namespace Shooting
             if (position.Y < BackGround.position.Y) enable = false;
         }
 
-        public void Draw(Graphics graphics)
+        public void Draw(Bitmap bitmap)
         {
+            var graphics = Graphics.FromImage(bitmap);
             graphics.DrawImage(image, position.X, position.Y, image.Width, image.Height);
         }
     }

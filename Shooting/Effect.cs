@@ -24,7 +24,7 @@ namespace Shooting
 
         public abstract void Progress();
 
-        public abstract void Draw(Graphics graphics);
+        public abstract void Draw(Bitmap bitmap);
     }
 
     /// <summary>
@@ -40,10 +40,21 @@ namespace Shooting
             time++;
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Bitmap bitmap)
         {
             var image = images[0];
-            graphics.DrawImage(image, position.X - image.Width / 2, position.Y - image.Height / 2, image.Width, image.Height);
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; ++j)
+                {
+                    var x = (int)position.X - image.Width / 2;
+                    var y = (int)position.Y - image.Height / 2;
+                    var R = Math.Min(bitmap.GetPixel(x + i, y + j).R + image.GetPixel(i, j).R, 255);
+                    var G = Math.Min(bitmap.GetPixel(x + i, y + j).G + image.GetPixel(i, j).G, 255);
+                    var B = Math.Min(bitmap.GetPixel(x + i, y + j).B + image.GetPixel(i, j).B, 255);
+                    bitmap.SetPixel(x + i, y + j, Color.FromArgb(255, R, G, B));
+                }
+            }
         }
     }
 
@@ -56,7 +67,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Bitmap bitmap)
         {
 
         }
@@ -71,7 +82,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Bitmap bitmap)
         {
 
         }
@@ -86,7 +97,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Bitmap bitmap)
         {
 
         }
@@ -100,7 +111,7 @@ namespace Shooting
 
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Bitmap bitmap)
         {
 
         }

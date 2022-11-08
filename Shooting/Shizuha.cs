@@ -128,8 +128,9 @@ namespace Shooting
             }
         }
 
-        public void Draw(Graphics graphics)
+        public void Draw(Bitmap bitmap)
         {
+            var graphics = Graphics.FromImage(bitmap);
             animation.Draw(graphics, position, mover.speed);
         }
 
