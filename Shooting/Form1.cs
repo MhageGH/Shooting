@@ -14,7 +14,7 @@ namespace Shooting
         static List<Bullet> bullets = new();
         static List<Effect> effects = new ();
         static BackGround backGround = new();
-        static Minoriko minoriko = new(shots, soundEffect);
+        static Minoriko minoriko = new(shots, soundEffect, effects);
         static Shizuha shizuha = new(minoriko, soundEffect, bullets, effects);
         static ShootingObject[] shootingObjects = new ShootingObject[] { backGround, minoriko, shizuha };
         Image imageStar = Properties.Resources.Star;

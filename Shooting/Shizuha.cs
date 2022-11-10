@@ -45,7 +45,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power_max = power = 50;
+                        power_max = power = 200;
                         state = 1;
                     }
                     break;

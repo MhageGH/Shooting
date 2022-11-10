@@ -17,16 +17,18 @@ namespace Shooting
         List<Shot> shots;
         SoundEffect soundEffect;
         Animation animation = new();
+        List<Effect> effects;
 
         public Vector2 position = new(initial_position.X, initial_position.Y);
         public readonly float radius = 3;
-        public int life = 3;
+        public int life = 5;
         public bool invincible = false;
 
-        public Minoriko(List<Shot> shots, SoundEffect soundEffect)
+        public Minoriko(List<Shot> shots, SoundEffect soundEffect, List<Effect> effects)
         {
             this.shots = shots;
             this.soundEffect = soundEffect;
+            this.effects = effects;
         }
 
         public void Progress()
@@ -94,6 +96,7 @@ namespace Shooting
 
         public void Die()
         {
+            effects.Add(new Effect1(position));
             soundEffect.Play(0);
             life--;
             comeback = true;
