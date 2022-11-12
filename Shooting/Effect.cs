@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using System;
 using System.Drawing.Imaging;
 using System.Numerics;
 
@@ -61,6 +62,7 @@ namespace Shooting
     class Effect0 : Effect
     {
         Vector2 position;
+        int life_period = 2;
 
         public Effect0(Vector2 position) 
         { 
@@ -69,7 +71,7 @@ namespace Shooting
 
         public override void Progress()
         {
-            if (time >= 2) enable = false;
+            if (time >= life_period) enable = false;
             time++;
         }
 
@@ -88,6 +90,7 @@ namespace Shooting
         Vector2 position;
         EffectElement0 element0A, element0B;
         EffectElement1[] element1s = new EffectElement1[10];
+        int life_period = 5;
 
         public Effect1(Vector2 position)
         {
@@ -103,7 +106,7 @@ namespace Shooting
             element0A.Progress();
             element0B.Progress();
             foreach (var element1 in element1s) element1.Progress();
-            if (time >= 5) enable = false;
+            if (time >= life_period) enable = false;
             ++time;
         }
 
@@ -167,6 +170,8 @@ namespace Shooting
     class Effect3 : Effect
     {
         Vector2 position;
+        const int life_period = 3;
+        float angle;
 
         public Effect3(Vector2 position)
         {
@@ -175,12 +180,23 @@ namespace Shooting
 
         public override void Progress()
         {
-
+            if (time == life_period) enable = false;
+            ++time;
         }
 
         public override void Draw(Bitmap canvas)
         {
-
+            var random = new Random();
+            angle = random.NextSingle() * 2 * MathF.PI;
+            var image = images[5];
+            var r = MathF.Sqrt(MathF.Pow(image.Width / 2.0f, 2) + MathF.Pow(image.Height / 2.0f, 2));
+            var img = new Bitmap((int)(2 * r), (int)(2 * r));
+            var graphics = Graphics.FromImage(img);
+            graphics.Clear(Color.Transparent);
+            float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
+            var vecs = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
+            graphics.DrawImage(image, vecs.Select(v => (PointF)(v + new Vector2(img.Width / 2, img.Height / 2))).ToArray());
+            Effect.DrawEffect(canvas, img, new(position.X - img.Width / 2, position.Y - img.Height / 2), 200);
         }
     }
 

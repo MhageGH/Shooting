@@ -32,7 +32,7 @@ namespace Shooting
             this.soundEffect = soundEffect;
             this.bullets = bullets;
             this.effects = effects;
-            attacker = new Attacker(bullets);
+            attacker = new Attacker(bullets, effects);
         }
 
         public void Progress()
@@ -245,9 +245,9 @@ namespace Shooting
             public int time = 0;
             BulletMaker bulletMaker;
 
-            public Attacker(List<Bullet> bullets)
+            public Attacker(List<Bullet> bullets, List<Effect> effects)
             {
-                bulletMaker = new BulletMaker(bullets);
+                bulletMaker = new BulletMaker(bullets, effects);
             }
 
             public void Attack0(Vector2 source_position, Vector2 target_position)

@@ -22,6 +22,7 @@ namespace Shooting
         Image imageShizuhaName = Properties.Resources.ShizuhaName;
         bool pause = false;
         int keyDeadTime = 0;
+        int bulletClearTime = 0;
 
         public Form1()
         {
@@ -40,7 +41,7 @@ namespace Shooting
                 bgmStream.Position = 0;
                 bgm.Play();
             }
-            if (minoriko.life == 0 || shizuha.gameClear ) return;
+            if (minoriko.life == 0) return;
             if (keyDeadTime > 0) keyDeadTime--;
             if (Keyboard.IsKeyDown(Key.Escape) && keyDeadTime == 0)
             {
@@ -62,7 +63,7 @@ namespace Shooting
             foreach (var shot in shots)
             {
                 shot.Progress();
-                if ((shot.position - shizuha.position).Length() < shot.radius + shizuha.radius)
+                if (shizuha.enable && (shot.position - shizuha.position).Length() < shot.radius + shizuha.radius)
                 {
                     shot.enable = false;
                     shizuha.ReceiveDamage();
@@ -70,12 +71,21 @@ namespace Shooting
                 }
             }
             shots.RemoveAll(s => s.enable == false);
-            foreach(var bullet in bullets)
+            if (bulletClearTime > 0) bulletClearTime--;
+            if (0 < bulletClearTime && bulletClearTime <= 4)
+            {
+                for (int i = 0; i < bullets.Count / bulletClearTime; ++i) // ピチュンエフェクトの後、全弾の1/4, 1/3, 1/2, 1/1と徐々に消していく
+                {
+                    effects.Add(new Effect3(bullets[i].position));
+                    bullets[i].enable = false;
+                }
+            }
+            foreach (var bullet in bullets)
             {
                 bullet.Progress();
                 if ((bullet.position - minoriko.position).Length() < bullet.radius + minoriko.radius && !minoriko.invincible)
                 {
-                    foreach (var b in bullets) b.enable = false;
+                    bulletClearTime = 10;
                     minoriko.Die();
                     break;
                 }
