@@ -14,8 +14,27 @@ namespace AdditiveSynthesisTest
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            //Paint1(e.Graphics);
-            Paint2(e.Graphics);
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            int N = 100;
+            for (int i = 0; i < N; ++i) Paint1(e.Graphics, 10);
+            sw.Stop();
+            var t1 = sw.ElapsedMilliseconds;
+            sw.Restart();
+            for (int i = 0; i < N; ++i) Paint1(e.Graphics, 20);
+            sw.Stop();
+            var t2 = sw.ElapsedMilliseconds;
+            // 64x64ピクセルエフェクト1個当たりの処理時間
+            e.Graphics.DrawString("GetPixel()による処理時間：" + (float)(t2 - t1) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 100));   
+            sw.Restart();
+            for (int i = 0; i < N; ++i) Paint2(e.Graphics, 10);
+            sw.Stop();
+            var t3 = sw.ElapsedMilliseconds;
+            sw.Restart();
+            for (int i = 0; i < N; ++i) Paint2(e.Graphics, 20);
+            sw.Stop();
+            var t4 = sw.ElapsedMilliseconds;
+            e.Graphics.DrawString("LockBits()による処理時間：" + (float)(t4 - t3) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 150));
         }
 
         static Bitmap To32bppArgb(Bitmap bitmap)
@@ -30,34 +49,39 @@ namespace AdditiveSynthesisTest
         }
 
 
-        void Paint1(Graphics graphics)
+        void Paint1(Graphics graphics, int numEffect)
         {
-            for (int i = 0; i < effect5.Width; i++)
+            var canvas = new Bitmap(background.Width, background.Height);
+            using (var g = Graphics.FromImage(canvas))
             {
-                for (int j = 0; j < effect5.Height; ++j)
+                g.DrawImage(background, 0, 0, background.Width, background.Height);
+                for (int i = 0; i < effect5.Width; i++)
                 {
-                    for (int k = 0; k < 10; ++k)
+                    for (int j = 0; j < effect5.Height; ++j)
                     {
-                        int x = 150 + 10 * k;
-                        int y = 50 + 10 * k;
-                        var R = background.GetPixel(x + i, y + j).R + effect5.GetPixel(i, j).R;
-                        var G = background.GetPixel(x + i, y + j).G + effect5.GetPixel(i, j).G;
-                        var B = background.GetPixel(x + i, y + j).B + effect5.GetPixel(i, j).B;
-                        background.SetPixel(x + i, y + j, Color.FromArgb(255, Math.Min(R, 255), Math.Min(G, 255), Math.Min(B, 255)));
+                        for (int k = 0; k < numEffect; ++k)
+                        {
+                            int x = 150 + 10 * k;
+                            int y = 50 + 10 * k;
+                            var R = canvas.GetPixel(x + i, y + j).R + effect5.GetPixel(i, j).R;
+                            var G = canvas.GetPixel(x + i, y + j).G + effect5.GetPixel(i, j).G;
+                            var B = canvas.GetPixel(x + i, y + j).B + effect5.GetPixel(i, j).B;
+                            canvas.SetPixel(x + i, y + j, Color.FromArgb(255, Math.Min(R, 255), Math.Min(G, 255), Math.Min(B, 255)));
+                        }
                     }
                 }
             }
-            graphics.DrawImage(background, 0, 0, background.Width, background.Height);
+            graphics.DrawImage(canvas, 0, 0, canvas.Width, canvas.Height);
         }
 
-        void Paint2(Graphics graphics)
+        void Paint2(Graphics graphics, int numEffect)
         {
             var canvas = new Bitmap(background.Width, background.Height);
             using (var g = Graphics.FromImage(canvas))
             {
                 g.DrawImage(background, 0, 0, background.Width, background.Height);
             }
-            for (int i = 0; i < 10; ++i) DrawEffect(canvas, new(150 + 10 * i, 50 + 10 * i));
+            for (int i = 0; i < numEffect; ++i) DrawEffect(canvas, new(150 + 10 * i, 50 + 10 * i));
             graphics.DrawImage(canvas, 0, 0, canvas.Width, canvas.Height);
         }
 
