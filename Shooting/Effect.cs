@@ -1,8 +1,6 @@
-﻿using NAudio.Gui;
-using OpenCvSharp;
+﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Drawing.Imaging;
-using System.Net.NetworkInformation;
 using System.Numerics;
 
 namespace Shooting
@@ -29,22 +27,33 @@ namespace Shooting
 
         public abstract void Draw(Bitmap canvas);
 
-        static protected void AdditiveSynthesisWithAlpha(Bitmap canvas, Bitmap image, int x, int y, int alpha)
+        static protected void DrawEffect(Bitmap canvas, Bitmap image, Vector2 position, int alpha)
         {
-            for (int i = 0; i < image.Width; i++)
+            int width = image.Width, height = image.Height;
+            var trimmedCanvas = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            using (var g = Graphics.FromImage(trimmedCanvas))
             {
-                if (x + i < 0 || x + i >= canvas.Width) continue;
-                for (int j = 0; j < image.Height; j++)
-                {
-                    if (y + j < 0 || y + j >= canvas.Height) continue;
-                    var color1 = canvas.GetPixel(x + i, y + j);
-                    var color2 = image.GetPixel(i, j);
-                    var A = Math.Min(color1.A + color2.A * alpha / 256, 255);
-                    var R = Math.Min(color1.R + color2.R * alpha / 256, 255);
-                    var G = Math.Min(color1.G + color2.G * alpha / 256, 255);
-                    var B = Math.Min(color1.B + color2.B * alpha / 256, 255);
-                    canvas.SetPixel(x + i, y + j, Color.FromArgb(A, R, G, B));
-                }
+                g.DrawImage(canvas, new Rectangle(0, 0, width, height), new Rectangle((int)position.X, (int)position.Y, width, height), GraphicsUnit.Pixel);
+            }
+            var canvasBmpData = trimmedCanvas.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            var efBmpData = image.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            try
+            {
+                var bgImgData = new byte[canvasBmpData.Stride * height];
+                System.Runtime.InteropServices.Marshal.Copy(canvasBmpData.Scan0, bgImgData, 0, bgImgData.Length);
+                var efImgData = new byte[efBmpData.Stride * height];
+                System.Runtime.InteropServices.Marshal.Copy(efBmpData.Scan0, efImgData, 0, efImgData.Length);
+                for (int i = 0; i < bgImgData.Length; i++) bgImgData[i] = (byte)Math.Min((int)bgImgData[i] + (int)efImgData[i] * alpha / 256, 255);
+                System.Runtime.InteropServices.Marshal.Copy(bgImgData, 0, canvasBmpData.Scan0, bgImgData.Length);
+            }
+            finally
+            {
+                trimmedCanvas.UnlockBits(canvasBmpData);
+                image.UnlockBits(efBmpData);
+            }
+            using (var g = Graphics.FromImage(canvas))
+            {
+                g.DrawImage(trimmedCanvas, position.X, position.Y, width, height);
             }
         }
     }
@@ -65,7 +74,7 @@ namespace Shooting
         public override void Draw(Bitmap canvas)
         {
             var image = images[0];
-            AdditiveSynthesisWithAlpha(canvas, image, (int)position.X - image.Width / 2, (int)position.Y - image.Height / 2, 255);
+            DrawEffect(canvas, image, new(position.X - image.Width / 2, position.Y - image.Height / 2), 255);
         }
     }
 
@@ -140,7 +149,7 @@ namespace Shooting
                 float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
                 var vecs = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
                 graphics.DrawImage(image, vecs.Select(v => (PointF)(v * scale + new Vector2(img.Width / 2, img.Height / 2))).ToArray());
-                AdditiveSynthesisWithAlpha(canvas, img, (int)position.X - img.Width / 2, (int)position.Y - img.Height / 2, alpha);
+                DrawEffect(canvas, img, new(position.X - img.Width / 2, position.Y - img.Height / 2), alpha);
             }
         }
 

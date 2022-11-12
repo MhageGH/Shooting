@@ -14,27 +14,34 @@ namespace AdditiveSynthesisTest
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            //Paint1(e.Graphics, 10);
+            //Paint2(e.Graphics, 10);
+            MeasureTime(e.Graphics);    // GetPixel()による処理は遅すぎてエフェクトに使えない⇒LockBits()による処理を採用
+        }
+
+        void MeasureTime(Graphics graphics)
+        {
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             int N = 100;
-            for (int i = 0; i < N; ++i) Paint1(e.Graphics, 10);
+            for (int i = 0; i < N; ++i) Paint1(graphics, 10);
             sw.Stop();
             var t1 = sw.ElapsedMilliseconds;
             sw.Restart();
-            for (int i = 0; i < N; ++i) Paint1(e.Graphics, 20);
+            for (int i = 0; i < N; ++i) Paint1(graphics, 20);
             sw.Stop();
             var t2 = sw.ElapsedMilliseconds;
             // 64x64ピクセルエフェクト1個当たりの処理時間
-            e.Graphics.DrawString("GetPixel()による処理時間：" + (float)(t2 - t1) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 100));   
+            graphics.DrawString("GetPixel()による処理時間：" + (float)(t2 - t1) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 100));
             sw.Restart();
-            for (int i = 0; i < N; ++i) Paint2(e.Graphics, 10);
+            for (int i = 0; i < N; ++i) Paint2(graphics, 10);
             sw.Stop();
             var t3 = sw.ElapsedMilliseconds;
             sw.Restart();
-            for (int i = 0; i < N; ++i) Paint2(e.Graphics, 20);
+            for (int i = 0; i < N; ++i) Paint2(graphics, 20);
             sw.Stop();
             var t4 = sw.ElapsedMilliseconds;
-            e.Graphics.DrawString("LockBits()による処理時間：" + (float)(t4 - t3) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 150));
+            graphics.DrawString("LockBits()による処理時間：" + (float)(t4 - t3) / N / 10 + "ms", Font, Brushes.Black, new Point(650, 150));
         }
 
         static Bitmap To32bppArgb(Bitmap bitmap)
