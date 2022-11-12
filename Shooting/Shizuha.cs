@@ -24,6 +24,7 @@ namespace Shooting
         public int power = 50;
         public bool gameClear = false;
         public bool enable = true;
+        Effect? effect2 = null;
 
         public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets, List<Effect> effects)
         {
@@ -45,8 +46,10 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power_max = power = 200;
+                        power_max = power = 50;
                         state = 1;
+                        effect2 = new Effect2(this);
+                        effects.Add(effect2);
                     }
                     break;
                 case 1:
@@ -57,6 +60,7 @@ namespace Shooting
                         mover.time = 0;
                         attacker.time = 0;
                         power_max = power = 50;
+                        if (effect2 != null) effect2.enable = false;
                         state = 2;
                     }
                     break;
@@ -66,6 +70,8 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        effect2 = new Effect2(this);
+                        effects.Add(effect2);
                         state = 3;
                     }
                     break;
@@ -77,6 +83,7 @@ namespace Shooting
                         mover.time = 0;
                         attacker.time = 0;
                         power_max = power = 50;
+                        if (effect2 != null) effect2.enable = false;
                         state = 4;
                     }
                     break;
@@ -86,6 +93,8 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        effect2 = new Effect2(this);
+                        effects.Add(effect2);
                         state = 5;
                     }
                     break;
@@ -97,6 +106,7 @@ namespace Shooting
                         mover.time = 0;
                         attacker.time = 0;
                         power_max = power = 50;
+                        if (effect2 != null) effect2.enable = false;
                         state = 6;
                     }
                     break;
@@ -106,6 +116,8 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        effect2 = new Effect2(this);
+                        effects.Add(effect2);
                         state = 7;
                     }
                     break;
@@ -116,6 +128,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        if (effect2 != null) effect2.enable = false;
                         state = 8;
                     }
                     break;

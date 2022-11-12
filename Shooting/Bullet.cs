@@ -65,8 +65,8 @@ namespace Shooting
             {
                 var angle = -MathF.Atan2(speed.X, speed.Y);
                 float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
-                var ps = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
-                graphics.DrawImage(image, ps.Select(p => (PointF)(p + position)).ToArray());
+                var points = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
+                graphics.DrawImage(image, points.Select(point => (PointF)(point + position)).ToArray());
             }
             else graphics.DrawImage(image, position.X - image.Width / 2, position.Y - image.Height / 2, image.Width, image.Height);
         }

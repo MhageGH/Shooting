@@ -13,20 +13,17 @@ namespace Shooting
             Properties.Resources.EffectSprite4, Properties.Resources.EffectSprite5, Properties.Resources.EffectSprite6
         };
         protected static Mat[] mats = images.Select(i => BitmapConverter.ToMat(i)).ToArray();
-        protected Vector2 position;
         protected int time = 0;
 
         public bool enable = true;
-
-        public Effect(Vector2 position)
-        {
-            this.position = position;
-        }
 
         public abstract void Progress();
 
         public abstract void Draw(Bitmap canvas);
 
+        /// <summary>
+        /// エフェクトを加算合成で描く
+        /// </summary>
         static public void DrawEffect(Bitmap canvas, Bitmap image, Vector2 position, int alpha)
         {
             int width = image.Width, height = image.Height;
@@ -63,7 +60,12 @@ namespace Shooting
     /// </summary>
     class Effect0 : Effect
     {
-        public Effect0(Vector2 position) : base(position) { }
+        Vector2 position;
+
+        public Effect0(Vector2 position) 
+        { 
+            this.position = position;
+        }
 
         public override void Progress()
         {
@@ -83,13 +85,13 @@ namespace Shooting
     /// </summary>
     class Effect1 : Effect
     {
-        float scale = 0;
-        int alpha = 100;
+        Vector2 position;
         EffectElement0 element0A, element0B;
         EffectElement1[] element1s = new EffectElement1[10];
 
-        public Effect1(Vector2 position) : base(position)
+        public Effect1(Vector2 position)
         {
+            this.position.X = position.X;
             var rand = new Random();
             element0A = new(images[1], position, rand.NextSingle() * MathF.PI, 0.4f);
             element0B = new(images[2], position, 0, 0.6f);
@@ -115,38 +117,61 @@ namespace Shooting
 
     }
 
+    /// <summary>
+    /// ボス用魔方陣エフェクト。持続型。終了時はenableをfalseにする。
+    /// </summary>
     class Effect2 : Effect
     {
-        public Effect2(Vector2 position) : base(position) { }
+        float angle = 0;
+        float scale = 0.5f;
+        bool in_scale_up = true;
+        const float angular_speed = 0.1f;
+        const float scale_speed = 0.01f;
+        const float scale_max = 1;
+        const float scale_min = 0.8f;
+        Shizuha shizuha;
+
+        public Effect2(Shizuha shizuha)
+        {
+            this.shizuha = shizuha;
+        }
 
         public override void Progress()
         {
-
+            angle += angular_speed;
+            if (in_scale_up)
+            {
+                scale += scale_speed;
+                if (scale > scale_max) in_scale_up = false;
+            }
+            else
+            {
+                scale -= scale_speed;
+                if (scale < scale_min) in_scale_up = true;
+            }
         }
 
         public override void Draw(Bitmap canvas)
         {
-
+            var image = images[4];
+            var graphics = Graphics.FromImage(canvas);
+            float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
+            var points = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
+            graphics.DrawImage(image, points.Select(point => (PointF)(point * scale + shizuha.position)).ToArray());
         }
     }
 
+    /// <summary>
+    /// 敵弾発射エフェクト
+    /// </summary>
     class Effect3 : Effect
     {
-        public Effect3(Vector2 position) : base(position) { }
+        Vector2 position;
 
-        public override void Progress()
+        public Effect3(Vector2 position)
         {
-
+            this.position = position;
         }
-
-        public override void Draw(Bitmap canvas)
-        {
-
-        }
-    }
-    class Effect4 : Effect
-    {
-        public Effect4(Vector2 position) : base(position) { }
 
         public override void Progress()
         {
@@ -160,7 +185,31 @@ namespace Shooting
     }
 
     /// <summary>
-    /// 時間と共に膨張し、消えていくエフェクト要素
+    /// キュイーン！エフェクト
+    /// </summary>
+    class Effect4 : Effect
+    {
+        Vector2 position;
+
+        public Effect4(Vector2 position)
+        {
+            this.position=position;
+        }
+
+
+        public override void Progress()
+        {
+
+        }
+
+        public override void Draw(Bitmap canvas)
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// 広がって消えるエフェクト要素
     /// </summary>
     class EffectElement0
     {
@@ -202,7 +251,7 @@ namespace Shooting
     }
 
     /// <summary>
-    /// 発生位置からランダムな方向に時間と共に遠ざかり、小さくなっていくエフェクト要素
+    /// 飛び散って消えるエフェクト要素
     /// </summary>
     class EffectElement1
     {
@@ -243,5 +292,13 @@ namespace Shooting
             if (scale == 0) return;
             Effect.DrawEffect(canvas, image, new(position.X - image.Width / 2, position.Y - image.Height / 2), alpha);
         }
+    }
+
+    /// <summary>
+    /// 吸い込まれるエフェクト要素
+    /// </summary>
+    class EffectElement2
+    {
+
     }
 }
