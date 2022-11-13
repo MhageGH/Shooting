@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using NAudio.Wave;
+using System.Drawing.Imaging;
 using System.Numerics;
 using System.Windows.Media.Animation;
 
@@ -16,6 +17,8 @@ namespace Shooting
         SoundEffect soundEffect;
         List<Bullet> bullets;
         List<Effect> effects;
+        Effect? effect2 = null;
+        CutIn cutIn = new();
 
         public float radius = 20;
         public Vector2 position = initial_position;
@@ -24,7 +27,6 @@ namespace Shooting
         public int power = 50;
         public bool gameClear = false;
         public bool enable = true;
-        Effect? effect2 = null;
 
         public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets, List<Effect> effects)
         {
@@ -38,6 +40,7 @@ namespace Shooting
         public void Progress()
         {
             animation.Progress();
+            if (cutIn.enable) cutIn.Progress();
             switch (state)
             {
                 case 0:
@@ -71,6 +74,8 @@ namespace Shooting
                 case 2:
                     if (mover.time == 0)
                     {
+                        cutIn.Start();
+                        soundEffect.Play(7);
                         soundEffect.Play(11);
                         effects.Add(new Effect4(initial_position));
                     }
@@ -125,6 +130,8 @@ namespace Shooting
                 case 6:
                     if (mover.time == 0)
                     {
+                        cutIn.Start();
+                        soundEffect.Play(7);
                         soundEffect.Play(11);
                         effects.Add(new Effect4(initial_position));
                     }
@@ -161,6 +168,7 @@ namespace Shooting
         {
             var graphics = Graphics.FromImage(canvas);
             animation.Draw(graphics, position, mover.speed);
+            if (cutIn.enable) cutIn.Draw(graphics);
         }
 
         public void ReceiveDamage()
@@ -269,50 +277,104 @@ namespace Shooting
             public void Attack0(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (++time % 150 < 100)
+                if (50 < time && time % 150 < 100)
                 {
                     bulletMaker.Make(source_position, target_position, 0);
                     bulletMaker.Make(source_position, target_position, 1);
                     bulletMaker.Make(source_position, target_position, 2);
-                    bulletMaker.time++;
                 }
+                time++;
+                bulletMaker.time++;
             }
 
             public void Attack1(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 50)
+                if (time >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 3);
                     bulletMaker.Make(source_position, target_position, 4);
                     bulletMaker.Make(source_position, target_position, 5);
                     bulletMaker.Make(source_position, target_position, 6);
                     bulletMaker.Make(source_position, target_position, 7);
-                    bulletMaker.time++;
                 }
+                time++;
+                bulletMaker.time++;
             }
 
             public void Attack2(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 50)
+                if (time >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 8);
                     bulletMaker.Make(source_position, target_position, 9);
-                    bulletMaker.time++;
                 }
+                time++;
+                bulletMaker.time++;
             }
 
             public void Attack3(Vector2 source_position, Vector2 target_position)
             {
                 if (time == 0) bulletMaker.time = 0;
-                if (time++ >= 50)
+                if (time >= 50)
                 {
                     bulletMaker.Make(source_position, target_position, 10);
                     bulletMaker.Make(source_position, target_position, 11);
-                    bulletMaker.time++;
+                }
+                time++;
+                bulletMaker.time++;
+            }
+        }
+
+        class CutIn
+        {
+            static Image image = Properties.Resources.BigShizuha;
+            public bool enable = false;
+            int alpha = 0;
+            Vector2 position;
+            readonly Vector2 initial_position = new(422, 420);
+            const float left_end = 228;
+            const float speed_to_left = 20;
+            const float speed_to_up = 10;
+            const int alpha_up_speed = 24;
+            const int alpha_down_speed = 4;
+
+            public void Start()
+            {
+                enable = true;
+                position = initial_position;
+                alpha = 0;
+            }
+
+            public void Progress()
+            {
+                if (position.X > left_end)
+                {
+                    position.X -= speed_to_left;
+                    alpha += alpha_up_speed;
+                    if (alpha > 255) alpha = 255;
+                }
+                else
+                {
+                    position.Y -= speed_to_up;
+                    alpha -= alpha_down_speed;
+                    if (alpha <= 0)
+                    {
+                        alpha = 0;
+                        enable = false;
+                    }
                 }
             }
+
+            public void Draw(Graphics graphics)
+            {
+                var imageAttributes = new ImageAttributes();
+                imageAttributes.SetColorMatrix(new() { Matrix00 = 1, Matrix11 = 1, Matrix22 = 1, Matrix33 = (float)alpha / 255, Matrix44 = 1 });
+                graphics.DrawImage(image, new Rectangle((int)position.X - image.Width / 2, (int)position.Y - image.Height / 2, image.Width, image.Height),
+                    0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttributes);
+            }
+
         }
     }
 }

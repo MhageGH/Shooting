@@ -8,7 +8,7 @@ namespace Shooting
     /// </summary>
     internal class BulletMaker
     {
-        public int time;
+        public int time = 0;
         List<Bullet> bullets;
         int count = 0;
         float vib_angle = 0;
