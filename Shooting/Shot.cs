@@ -6,7 +6,6 @@ namespace Shooting
     {
         static Image image = Properties.Resources.Shot;
         static int speed = 20;
-        static int effectID = 0;
         public Vector2 position;
         public float radius = 10;
         public bool enable = true;
@@ -25,7 +24,7 @@ namespace Shooting
         public void Draw(Bitmap canvas)
         {
             var graphics = Graphics.FromImage(canvas);
-            graphics.DrawImage(image, position.X, position.Y, image.Width, image.Height);
+            graphics.DrawImage(image, position.X - image.Width / 2, position.Y - image.Height / 2, image.Width, image.Height);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Shooting
         List<Effect> effects;
         Effect? effect2 = null;
         CutIn cutIn = new();
+        int spellNumber = 0;
 
         public float radius = 20;
         public Vector2 position = initial_position;
@@ -27,6 +28,7 @@ namespace Shooting
         public int power = 50;
         public bool gameClear = false;
         public bool enable = true;
+        public bool spell = false;
 
         public Shizuha(Minoriko minoriko, SoundEffect soundEffect, List<Bullet> bullets, List<Effect> effects)
         {
@@ -66,7 +68,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power_max = power = 50;
+                        power_max = power = 100;
                         if (effect2 != null) effect2.enable = false;
                         state = 2;
                     }
@@ -76,6 +78,8 @@ namespace Shooting
                     {
                         cutIn.Start();
                         soundEffect.Play(7);
+                        spell = true;
+                        spellNumber = 0;
                         soundEffect.Play(11);
                         effects.Add(new Effect4(initial_position));
                     }
@@ -95,6 +99,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        spell = false;
                         power_max = power = 50;
                         if (effect2 != null) effect2.enable = false;
                         state = 4;
@@ -132,6 +137,8 @@ namespace Shooting
                     {
                         cutIn.Start();
                         soundEffect.Play(7);
+                        spell = true;
+                        spellNumber = 1;
                         soundEffect.Play(11);
                         effects.Add(new Effect4(initial_position));
                     }
@@ -151,6 +158,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
+                        spell = false;
                         if (effect2 != null) effect2.enable = false;
                         state = 8;
                     }
@@ -169,6 +177,7 @@ namespace Shooting
             var graphics = Graphics.FromImage(canvas);
             animation.Draw(graphics, position, mover.speed);
             if (cutIn.enable) cutIn.Draw(graphics);
+            if (spell) SpellName.Draw(graphics, spellNumber);
         }
 
         public void ReceiveDamage()
@@ -289,15 +298,12 @@ namespace Shooting
 
             public void Attack1(Vector2 source_position, Vector2 target_position)
             {
-                if (time == 0) bulletMaker.time = 0;
-                if (time >= 50)
-                {
-                    bulletMaker.Make(source_position, target_position, 3);
-                    bulletMaker.Make(source_position, target_position, 4);
-                    bulletMaker.Make(source_position, target_position, 5);
-                    bulletMaker.Make(source_position, target_position, 6);
-                    bulletMaker.Make(source_position, target_position, 7);
-                }
+                if (time == 0) bulletMaker.time = 100;
+                bulletMaker.Make(source_position, target_position, 3);
+                bulletMaker.Make(source_position, target_position, 4);
+                bulletMaker.Make(source_position, target_position, 5);
+                bulletMaker.Make(source_position, target_position, 6);
+                bulletMaker.Make(source_position, target_position, 7);
                 time++;
                 bulletMaker.time++;
             }
@@ -375,6 +381,20 @@ namespace Shooting
                     0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttributes);
             }
 
+        }
+
+        class SpellName
+        {
+            static Image[] images = new[] { Properties.Resources.SpellName0, Properties.Resources.SpellName1 };
+            const int left_margin = 200;
+            const int top_margin = 20;
+            static Vector2 position = new Vector2(BackGround.position.X + left_margin, BackGround.position.Y + top_margin);
+
+            static public void Draw(Graphics grahpics, int spellNumber)
+            {
+                var image = images[spellNumber];
+                grahpics.DrawImage(image, position.X, position.Y, image.Width, image.Height);
+            }
         }
     }
 }

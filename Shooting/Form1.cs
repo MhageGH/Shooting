@@ -27,7 +27,6 @@ namespace Shooting
         public Form1()
         {
             InitializeComponent();
-            backGround.SpellEnable = false;
             bgm.Init(bgmStream);
             bgm.Volume = 0.5f; // NAudioのボリュームはstaticクラスに結びついているため全WaveOutオブジェクトに適用される。個別の音量調整は出来ない。音源の方で予め比率を調整しておく。
             bgm.Play();
@@ -36,6 +35,7 @@ namespace Shooting
         private void timer1_Tick(object sender, EventArgs e)
         {
             Invalidate();
+            backGround.spell = shizuha.spell;
             if (bgmStream.Position == bgmStream.Length)
             {
                 bgmStream.Position = 0;
@@ -103,9 +103,9 @@ namespace Shooting
 
             // 注意: DrawImage(Image, Point)は元の物理サイズが適用されるのでNG。WidthとHeightを指定すること。
             backGround.Draw(canvas);
+            minoriko.Draw(canvas);
             foreach (var shot in shots) shot.Draw(canvas);
             foreach (var bullet in bullets) bullet.Draw(canvas);
-            minoriko.Draw(canvas);
             if (shizuha.enable)
             {
                 shizuha.Draw(canvas);
@@ -124,8 +124,6 @@ namespace Shooting
             }
             else if (shizuha.gameClear)
             {
-                graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 128, 128, 128)),
-                    BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
                 graphics.DrawString("Game Clear!", new Font("メイリオ", 35), Brushes.Gold, 80, 200);
             }
             else if (pause)

@@ -11,19 +11,18 @@ namespace Shooting
         SpellBackGround spellBackGround = new SpellBackGround();
         public static Vector2 position = new(35, 16);
         public static System.Drawing.Size screen_size = new(387, 451);
-
-        public bool SpellEnable = false;
+        public bool spell = false;
 
         public void Progress()
         {
-            if (SpellEnable) spellBackGround.Progress();
+            if (spell) spellBackGround.Progress();
             else normalBackGround.Progress();
         }
 
         public void Draw(Bitmap canvas)
         {
             var graphics = Graphics.FromImage(canvas);
-            if (SpellEnable) spellBackGround.Draw(graphics);
+            if (spell) spellBackGround.Draw(graphics);
             else normalBackGround.Draw(graphics);
         }
 
