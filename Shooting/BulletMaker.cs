@@ -13,11 +13,13 @@ namespace Shooting
         int count = 0;
         float vib_angle = 0;
         List<Effect> effects;
+        SoundEffect soundEffect;
 
-        public BulletMaker(List<Bullet> bullets, List<Effect> effects)
+        public BulletMaker(List<Bullet> bullets, List<Effect> effects, SoundEffect soundEffect)
         {
             this.bullets = bullets;
             this.effects = effects;
+            this.soundEffect = soundEffect;
         }
 
         public void Make(Vector2 source_position, Vector2 target_position, int ID)
@@ -33,6 +35,7 @@ namespace Shooting
                             var position = source_position + 30 * dirs[i];
                             var speed = 4 * dirs[i];
                             bullets.Add(new(0, 0, false, position, speed));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -47,6 +50,7 @@ namespace Shooting
                             var v = target_position - position;
                             var speed = 10 * v / v.Length();
                             bullets.Add(new(1, 0, true, position, speed));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -62,6 +66,7 @@ namespace Shooting
                             var position = source_position + 30 * dir;
                             var speed = 8 * dir;
                             bullets.Add(new(2, 0, true, position, speed));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -76,6 +81,7 @@ namespace Shooting
                             var position = source_position + 20 * dir;
                             var vs = new float[] { 6, 8, 10 };
                             foreach (var v in vs) bullets.Add(new(3, 1, false, position, v * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -91,6 +97,7 @@ namespace Shooting
                             var position = source_position + 50 * dir;
                             var vs = new float[] { 1, 2, 3, 4 };
                             foreach (var v in vs) bullets.Add(new(4, 1, false, position, v * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -109,6 +116,7 @@ namespace Shooting
                                     var dir = new Vector2(MathF.Sin(i * angle - MathF.PI), MathF.Cos(i * angle - MathF.PI));
                                     var position = source_position + 50 * dir;
                                     bullets.Add(new(4, 0, false, position, 10 * dir));
+                                    soundEffect.Play(10);
                                     effects.Add(new Effect3(position));
                                 }
                             }
@@ -126,6 +134,7 @@ namespace Shooting
                             var position = source_position + 50 * dir;
                             var vs = new float[] { 1, 2, 3, 4 };
                             foreach (var v in vs) bullets.Add(new(5, 1, false, position, v * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -142,6 +151,7 @@ namespace Shooting
                             var dir = new Vector2(MathF.Sin(i * angle - MathF.PI + angle / 2), MathF.Cos(i * angle - MathF.PI + angle / 2));
                             var position = source_position - 50 * dir;
                             bullets.Add(new(6, 0, true, position, 10 * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -161,6 +171,7 @@ namespace Shooting
                             var dir = new Vector2(d1.X * c - d1.Y * s, d1.X * s + d1.Y * c);
                             var position = source_position + 50 * dir;
                             bullets.Add(new(1, 0, true, position, 6 * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -174,6 +185,7 @@ namespace Shooting
                             BackGround.position.Y + 100 * rand.NextSingle());
                         var speed = new Vector2(0, 4 + 4 * rand.NextSingle());
                         bullets.Add(new(7, 0, true, position, speed));
+                        soundEffect.Play(10);
                         effects.Add(new Effect3(position));
                     }
                     break;
@@ -187,6 +199,7 @@ namespace Shooting
                             var dir = new Vector2(MathF.Sin(angle), MathF.Cos(angle));
                             var position = source_position + 50 * dir;
                             bullets.Add(new(4, 2, true, position, 3 * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
@@ -202,6 +215,7 @@ namespace Shooting
                             var dir = new Vector2(MathF.Sin(angle), MathF.Cos(angle));
                             var position = source_position + 50 * dir;
                             bullets.Add(new(7, 2, true, position, 2 * dir));
+                            soundEffect.Play(10);
                             effects.Add(new Effect3(position));
                         }
                     }
