@@ -1,6 +1,5 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using System;
 using System.Drawing.Imaging;
 using System.Numerics;
 
@@ -64,8 +63,8 @@ namespace Shooting
         Vector2 position;
         int life_period = 2;
 
-        public Effect0(Vector2 position) 
-        { 
+        public Effect0(Vector2 position)
+        {
             this.position = position;
         }
 
@@ -206,21 +205,26 @@ namespace Shooting
     class Effect4 : Effect
     {
         Vector2 position;
+        EffectElement2[] element2s = new EffectElement2[10];
+        const int life_period = 200;
 
         public Effect4(Vector2 position)
         {
-            this.position=position;
+            this.position = position;
+            for (int i = 0; i < element2s.Length; ++i) element2s[i] = new(images[6], position);
         }
 
 
         public override void Progress()
         {
-
+            foreach (var element2 in element2s) element2.Progress();
+            if (time == life_period) enable = false;
+            ++time;
         }
 
         public override void Draw(Bitmap canvas)
         {
-
+            foreach (var element2 in element2s) element2.Draw(canvas);
         }
     }
 
@@ -271,7 +275,6 @@ namespace Shooting
     /// </summary>
     class EffectElement1
     {
-
         Bitmap image;
         Vector2 position;
         const float max_away_speed = 20;
@@ -315,6 +318,46 @@ namespace Shooting
     /// </summary>
     class EffectElement2
     {
+        Bitmap image;
+        Vector2 position;
+        Vector2 convergence_point;
+        bool visible = true;
+        const float r_min = 50;
+        const float r_max = 500;
+        float r, angle;
+        const float speed = 10;
 
+        public EffectElement2(Bitmap image, Vector2 convergence_point)
+        {
+            this.image = image;
+            this.convergence_point = convergence_point;
+            var random = new Random();
+            r = r_min + random.NextSingle() * (r_max - r_min);
+            var alpha = random.NextSingle() * 2 * MathF.PI;
+            position.X = r * MathF.Cos(alpha) + convergence_point.X;
+            position.Y = r * MathF.Sin(alpha) + convergence_point.Y;
+            angle = random.NextSingle() * 2 * MathF.PI;
+        }
+
+        public void Progress()
+        {
+            var v = convergence_point - position;
+            var l = v.Length();
+            if (l < speed) visible = false;
+            else position += speed * v / l;
+        }
+
+        public void Draw(Bitmap canvas)
+        {
+            if (!visible) return;
+            var r = MathF.Sqrt(MathF.Pow(image.Width / 2.0f, 2) + MathF.Pow(image.Height / 2.0f, 2));
+            var img = new Bitmap((int)(2 * r), (int)(2 * r));
+            var graphics = Graphics.FromImage(img);
+            graphics.Clear(Color.Transparent);
+            float x = image.Width / 2, y = image.Height / 2, c = MathF.Cos(angle), s = MathF.Sin(angle);
+            var vecs = new Vector2[] { new(-x * c + y * s, -x * s - y * c), new(x * c + y * s, x * s - y * c), new(-x * c - y * s, -x * s + y * c) };
+            graphics.DrawImage(image, vecs.Select(v => (PointF)(v + new Vector2(img.Width / 2, img.Height / 2))).ToArray());
+            Effect.DrawEffect(canvas, img, new(position.X - img.Width / 2, position.Y - img.Height / 2), 255);
+        }
     }
 }

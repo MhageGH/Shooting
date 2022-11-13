@@ -41,7 +41,11 @@ namespace Shooting
             switch (state)
             {
                 case 0:
-                    if (mover.time == 0) soundEffect.Play(11);    // 溜め効果音
+                    if (mover.time == 0)
+                    {
+                        soundEffect.Play(11);    // 溜め効果音
+                        effects.Add(new Effect4(initial_position));
+                    }
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
@@ -65,7 +69,11 @@ namespace Shooting
                     }
                     break;
                 case 2:
-                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.time == 0)
+                    {
+                        soundEffect.Play(11);
+                        effects.Add(new Effect4(initial_position));
+                    }
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
@@ -88,7 +96,11 @@ namespace Shooting
                     }
                     break;
                 case 4:
-                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.time == 0)
+                    {
+                        soundEffect.Play(11);
+                        effects.Add(new Effect4(initial_position));
+                    }
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
@@ -111,7 +123,11 @@ namespace Shooting
                     }
                     break;
                 case 6:
-                    if (mover.time == 0) soundEffect.Play(11);
+                    if (mover.time == 0)
+                    {
+                        soundEffect.Play(11);
+                        effects.Add(new Effect4(initial_position));
+                    }
                     if (mover.Move0(ref position) == true)
                     {
                         mover.time = 0;
