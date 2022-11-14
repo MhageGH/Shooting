@@ -2,6 +2,7 @@
 using NAudio.Wave;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Windows.Automation;
 using System.Windows.Media.Animation;
 
 namespace Shooting
@@ -20,6 +21,7 @@ namespace Shooting
         Effect? effect2 = null;
         CutIn cutIn = new();
         int spellNumber = 0;
+        TalkEvent talkEvent = new();
 
         public float radius = 20;
         public Vector2 position = initial_position;
@@ -46,6 +48,9 @@ namespace Shooting
             switch (state)
             {
                 case 0:
+                    if (talkEvent.Progress0()) state = 1;
+                    break;
+                case 1:                    
                     if (mover.time == 0)
                     {
                         soundEffect.Play(11);    // 溜め効果音
@@ -56,12 +61,12 @@ namespace Shooting
                         mover.time = 0;
                         attacker.time = 0;
                         power_max = power = 50;
-                        state = 1;
+                        state = 2;
                         effect2 = new Effect2(this);
                         effects.Add(effect2);
                     }
                     break;
-                case 1:
+                case 2:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack0(position, minoriko.position);
                     if (power <= 0)
@@ -70,10 +75,10 @@ namespace Shooting
                         attacker.time = 0;
                         power_max = power = 100;
                         if (effect2 != null) effect2.enable = false;
-                        state = 2;
+                        state = 3;
                     }
                     break;
-                case 2:
+                case 3:
                     if (mover.time == 0)
                     {
                         cutIn.Start();
@@ -89,10 +94,10 @@ namespace Shooting
                         attacker.time = 0;
                         effect2 = new Effect2(this);
                         effects.Add(effect2);
-                        state = 3;
+                        state = 4;
                     }
                     break;
-                case 3:
+                case 4:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack1(position, minoriko.position);
                     if (power <= 0)
@@ -102,10 +107,10 @@ namespace Shooting
                         spell = false;
                         power_max = power = 50;
                         if (effect2 != null) effect2.enable = false;
-                        state = 4;
+                        state = 5;
                     }
                     break;
-                case 4:
+                case 5:
                     if (mover.time == 0)
                     {
                         soundEffect.Play(11);
@@ -117,10 +122,10 @@ namespace Shooting
                         attacker.time = 0;
                         effect2 = new Effect2(this);
                         effects.Add(effect2);
-                        state = 5;
+                        state = 6;
                     }
                     break;
-                case 5:
+                case 6:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack2(position, minoriko.position);
                     if (power <= 0)
@@ -129,10 +134,10 @@ namespace Shooting
                         attacker.time = 0;
                         power_max = power = 50;
                         if (effect2 != null) effect2.enable = false;
-                        state = 6;
+                        state = 7;
                     }
                     break;
-                case 6:
+                case 7:
                     if (mover.time == 0)
                     {
                         cutIn.Start();
@@ -148,10 +153,10 @@ namespace Shooting
                         attacker.time = 0;
                         effect2 = new Effect2(this);
                         effects.Add(effect2);
-                        state = 7;
+                        state = 8;
                     }
                     break;
-                case 7:
+                case 8:
                     mover.Move1(ref position, minoriko.position);
                     attacker.Attack3(position, minoriko.position);
                     if (power <= 0)
@@ -160,14 +165,20 @@ namespace Shooting
                         attacker.time = 0;
                         spell = false;
                         if (effect2 != null) effect2.enable = false;
-                        state = 8;
+                        state = 9;
                     }
                     break;
-                case 8:
+                case 9:
                     if (enable) soundEffect.Play(6);
-                    gameClear = true;
                     foreach (var bullet in bullets) bullet.enable = false;
                     enable = false;
+                    state = 10;
+                    break;
+                case 10:
+                    if (talkEvent.Progress1()) state = 11;
+                    break;
+                case 11:
+                    gameClear = true;
                     break;
             }
         }
@@ -178,6 +189,12 @@ namespace Shooting
             animation.Draw(graphics, position, mover.speed);
             if (cutIn.enable) cutIn.Draw(graphics);
             if (spell) SpellName.Draw(graphics, spellNumber);
+        }
+
+        public void DrawTalkEvent(Bitmap canvas)
+        {
+            var graphics = Graphics.FromImage(canvas);
+            talkEvent.Draw(graphics);
         }
 
         public void ReceiveDamage()
@@ -394,6 +411,60 @@ namespace Shooting
             {
                 var image = images[spellNumber];
                 grahpics.DrawImage(image, position.X, position.Y, image.Width, image.Height);
+            }
+        }
+
+        class TalkEvent
+        {
+            static Image[] images = new[] { Properties.Resources.TextBack, Properties.Resources.MinorikoText, Properties.Resources.ShizuhaText,
+                Properties.Resources.BigMinoriko, Properties.Resources.BigShizuha, Properties.Resources.MinorikoText2 };
+            readonly int[] lineChangeTimes = new[] { 60, 180, 300, 400, 750 };
+            int time;
+            public int state = 0;
+
+            // trueを返すまで呼ぶ
+            public bool Progress0()
+            {
+                if (state == 0 && time == lineChangeTimes[0]) state = 1;
+                else if (state == 1 && time == lineChangeTimes[1]) state = 2;
+                else if (state == 2 && time == lineChangeTimes[2])
+                {
+                    state = 3;
+                    return true;
+                }
+                ++time;
+                return false;
+            }
+
+            // trueを返すまで呼ぶ
+            public bool Progress1()
+            {
+                if (state == 3 && time == lineChangeTimes[3]) state = 4;
+                else if (state == 4 && time == lineChangeTimes[4]) return true;
+                ++time;
+                return false;
+            }
+
+            public void Draw(Graphics graphics)
+            {
+                switch(state)
+                {
+                    case 1:
+                        graphics.DrawImage(images[3], 32, 120, images[3].Width, images[3].Height);
+                        graphics.DrawImage(images[0], 52, 380, images[0].Width, images[0].Height);
+                        graphics.DrawImage(images[1], 52, 380, images[1].Width, images[1].Height);
+                        break;
+                    case 2:
+                        graphics.DrawImage(images[4], 200, 120, images[3].Width, images[3].Height);
+                        graphics.DrawImage(images[0], 52, 380, images[0].Width, images[0].Height);
+                        graphics.DrawImage(images[2], 52, 380, images[1].Width, images[1].Height);
+                        break;
+                    case 4:
+                        graphics.DrawImage(images[3], 32, 120, images[3].Width, images[3].Height);
+                        graphics.DrawImage(images[0], 52, 380, images[0].Width, images[0].Height);
+                        graphics.DrawImage(images[5], 52, 380, images[1].Width, images[1].Height);
+                        break;
+                }
             }
         }
     }

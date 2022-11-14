@@ -293,6 +293,26 @@ namespace Shooting.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap MinorikoText {
+            get {
+                object obj = ResourceManager.GetObject("MinorikoText", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap MinorikoText2 {
+            get {
+                object obj = ResourceManager.GetObject("MinorikoText2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap PowerBar {
             get {
                 object obj = ResourceManager.GetObject("PowerBar", resourceCulture);
@@ -424,6 +444,16 @@ namespace Shooting.Properties {
         internal static System.Drawing.Bitmap ShizuhaName {
             get {
                 object obj = ResourceManager.GetObject("ShizuhaName", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ShizuhaText {
+            get {
+                object obj = ResourceManager.GetObject("ShizuhaText", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

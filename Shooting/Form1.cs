@@ -116,6 +116,7 @@ namespace Shooting
             foreach (var effect in effects) effect.Draw(canvas);
             graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
             for (int i = 0; i < minoriko.life - 1; ++i) graphics.DrawImage(imageStar, 515 + 15 * i, 108, imageStar.Width, imageStar.Height);
+            shizuha.DrawTalkEvent(canvas);
             if (minoriko.life == 0)
             {
                 graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), 
@@ -124,6 +125,8 @@ namespace Shooting
             }
             else if (shizuha.gameClear)
             {
+                graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)),
+                    BackGround.position.X, BackGround.position.Y, BackGround.screen_size.Width, BackGround.screen_size.Height);
                 graphics.DrawString("Game Clear!", new Font("メイリオ", 35), Brushes.Gold, 80, 200);
             }
             else if (pause)
