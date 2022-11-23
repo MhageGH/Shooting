@@ -1,4 +1,4 @@
-﻿namespace RotateTest
+﻿namespace TimerTest
 {
     partial class Form1
     {
@@ -35,13 +35,14 @@
             // timer1
             // 
             this.timer1.Enabled = true;
+            this.timer1.Interval = 33;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 450);
+            this.ClientSize = new System.Drawing.Size(800, 265);
             this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";

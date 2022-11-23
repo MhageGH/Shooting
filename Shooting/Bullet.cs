@@ -30,7 +30,7 @@ namespace Shooting
             this.rotatable = rotable;
             this.position = initial_position;
             this.speed = initial_speed;
-            this.radius = radii[actID];
+            this.radius = radii[imageID];
         }
 
         public void Progress()
