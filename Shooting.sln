@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerTest", "TimerTest\Time
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleUpDownTest", "ScaleUpDownTest\ScaleUpDownTest.csproj", "{62CE6BA2-1A92-48DF-8E32-428E499678D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationTest", "AnimationTest\AnimationTest.csproj", "{80594CB7-482A-4D18-B39D-1CAC598ABDCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationTest", "AnimationTest\AnimationTest.csproj", "{80594CB7-482A-4D18-B39D-1CAC598ABDCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyInputTest", "KeyInputTest\KeyInputTest.csproj", "{1B10E2FD-2245-46A7-90C8-272254AD8F2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{80594CB7-482A-4D18-B39D-1CAC598ABDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80594CB7-482A-4D18-B39D-1CAC598ABDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80594CB7-482A-4D18-B39D-1CAC598ABDCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B10E2FD-2245-46A7-90C8-272254AD8F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B10E2FD-2245-46A7-90C8-272254AD8F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B10E2FD-2245-46A7-90C8-272254AD8F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B10E2FD-2245-46A7-90C8-272254AD8F2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
