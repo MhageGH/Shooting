@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationTest", "AnimationT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyInputTest", "KeyInputTest\KeyInputTest.csproj", "{1B10E2FD-2245-46A7-90C8-272254AD8F2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassTest", "ClassTest\ClassTest.csproj", "{B2573089-E8F2-4DBB-BD7C-1635C02E364F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassTest", "ClassTest\ClassTest.csproj", "{B2573089-E8F2-4DBB-BD7C-1635C02E364F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnemyTest", "EnemyTest\EnemyTest.csproj", "{A6ADB7B3-C772-43B7-8F94-BBAAB39875C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShotTest", "ShotTest\ShotTest.csproj", "{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,14 @@ Global
 		{B2573089-E8F2-4DBB-BD7C-1635C02E364F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2573089-E8F2-4DBB-BD7C-1635C02E364F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2573089-E8F2-4DBB-BD7C-1635C02E364F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6ADB7B3-C772-43B7-8F94-BBAAB39875C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6ADB7B3-C772-43B7-8F94-BBAAB39875C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6ADB7B3-C772-43B7-8F94-BBAAB39875C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6ADB7B3-C772-43B7-8F94-BBAAB39875C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

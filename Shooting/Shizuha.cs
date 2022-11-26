@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using NAudio.Wave;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using System.Numerics;
-using System.Windows.Automation;
-using System.Windows.Media.Animation;
 
 namespace Shooting
 {
