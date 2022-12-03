@@ -23,7 +23,7 @@ namespace AdditiveSynthesisTest
         {
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            int N = 100;
+            int N = 5;
             for (int i = 0; i < N; ++i) Paint1(graphics, 10);
             sw.Stop();
             var t1 = sw.ElapsedMilliseconds;

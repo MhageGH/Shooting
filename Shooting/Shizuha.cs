@@ -183,7 +183,7 @@ namespace Shooting
         {
             var graphics = Graphics.FromImage(canvas);
             animation.Draw(graphics, position, mover.speed);
-            //if (cutIn.enable) cutIn.Draw(graphics);
+            if (cutIn.enable) cutIn.Draw(graphics);
             if (spell) SpellName.Draw(graphics, spellNumber);
         }
 
