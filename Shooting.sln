@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnemyTest", "EnemyTest\Enem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShotTest", "ShotTest\ShotTest.csproj", "{558CE921-6319-4F46-93EC-5A7F0BB3DAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletTest", "BulletTest\BulletTest.csproj", "{93018FDB-8FF2-4AE4-BA8A-B223EB9525B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BulletTest", "BulletTest\BulletTest.csproj", "{93018FDB-8FF2-4AE4-BA8A-B223EB9525B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioTest", "NAudioTest\NAudioTest.csproj", "{34280F51-D48C-4D00-A916-9E0282AFEFFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundTest", "BackgroundTest\BackgroundTest.csproj", "{D6A5EC59-745B-4284-8CC9-19BC10FE9A92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,14 @@ Global
 		{93018FDB-8FF2-4AE4-BA8A-B223EB9525B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93018FDB-8FF2-4AE4-BA8A-B223EB9525B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93018FDB-8FF2-4AE4-BA8A-B223EB9525B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34280F51-D48C-4D00-A916-9E0282AFEFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34280F51-D48C-4D00-A916-9E0282AFEFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34280F51-D48C-4D00-A916-9E0282AFEFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34280F51-D48C-4D00-A916-9E0282AFEFFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6A5EC59-745B-4284-8CC9-19BC10FE9A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6A5EC59-745B-4284-8CC9-19BC10FE9A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6A5EC59-745B-4284-8CC9-19BC10FE9A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6A5EC59-745B-4284-8CC9-19BC10FE9A92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

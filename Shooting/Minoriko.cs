@@ -1,5 +1,4 @@
-﻿using NAudio.Wave;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Windows.Input;
 
 namespace Shooting

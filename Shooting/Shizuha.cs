@@ -22,8 +22,8 @@ namespace Shooting
         public float radius = 20;
         public Vector2 position = initial_position;
         public bool spellCard = false;
-        public int power_max = 50;
-        public int power = 50;
+        public int power_max = 100;
+        public int power = 100;
         public bool gameClear = false;
         public bool enable = true;
         public bool spell = false;
@@ -56,7 +56,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power_max = power = 50;
+                        power_max = power = 100;
                         state = 2;
                         effect2 = new Effect2(this);
                         effects.Add(effect2);
@@ -101,7 +101,7 @@ namespace Shooting
                         mover.time = 0;
                         attacker.time = 0;
                         spell = false;
-                        power_max = power = 50;
+                        power_max = power = 100;
                         if (effect2 != null) effect2.enable = false;
                         state = 5;
                     }
@@ -128,7 +128,7 @@ namespace Shooting
                     {
                         mover.time = 0;
                         attacker.time = 0;
-                        power_max = power = 50;
+                        power_max = power = 100;
                         if (effect2 != null) effect2.enable = false;
                         state = 7;
                     }
@@ -183,7 +183,7 @@ namespace Shooting
         {
             var graphics = Graphics.FromImage(canvas);
             animation.Draw(graphics, position, mover.speed);
-            if (cutIn.enable) cutIn.Draw(graphics);
+            //if (cutIn.enable) cutIn.Draw(graphics);
             if (spell) SpellName.Draw(graphics, spellNumber);
         }
 

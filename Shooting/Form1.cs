@@ -113,10 +113,10 @@ namespace Shooting
                 graphics.DrawImage(imagePowerBar, new Rectangle(45, 31, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height),
                     new Rectangle(0, 0, imagePowerBar.Width * shizuha.power / shizuha.power_max, imagePowerBar.Height), GraphicsUnit.Pixel);
             }
-            foreach (var effect in effects) effect.Draw(canvas);
+            //foreach (var effect in effects) effect.Draw(canvas);
             graphics.DrawImage(imageFrame, 0, 0, imageFrame.Width, imageFrame.Height);
             for (int i = 0; i < minoriko.life - 1; ++i) graphics.DrawImage(imageStar, 515 + 15 * i, 108, imageStar.Width, imageStar.Height);
-            shizuha.DrawTalkEvent(canvas);
+            //shizuha.DrawTalkEvent(canvas);
             if (minoriko.life == 0)
             {
                 graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 0, 0)), 

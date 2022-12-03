@@ -74,7 +74,7 @@ namespace Shooting
                 var inPoints = new Point2f[] { new(0, 0), new(trimWidth, 0), new(trimWidth, trimHeight), new(0, trimHeight) };
                 var outPoints = new Point2f[] { new(shrink, 0), new(trimWidth - shrink, 0), new(trimWidth, trimHeight), new(0, trimHeight) };
                 var perspectivMat = Cv2.GetPerspectiveTransform(inPoints, outPoints);
-                var maplesBitmap = CreateMaplesBitmap(outPoints);
+                var maplesBitmap = CreateMaplesBitmap();
                 var mats = new Mat[] { matGround, BitmapConverter.ToMat(maplesBitmap), matCloud };
                 var offsets = new int[] { groundOffset, maplesOffset, cloudOffset };
                 for (int i = 0; i < mats.Length; i++)
@@ -88,7 +88,7 @@ namespace Shooting
                 graphics.DrawImage(imageSunset, BackGround.position.X, BackGround.position.Y, imageSunset.Width, imageSunset.Height);
             }
 
-            Bitmap CreateMaplesBitmap(Point2f[] groundOutPoints)
+            Bitmap CreateMaplesBitmap()
             {
                 var bitmap = new Bitmap(trimWidth, trimHeight, PixelFormat.Format32bppArgb); // 透明なBitmapキャンバスを作り、そこにGraphicsで書き込んでいく
                 var g = Graphics.FromImage(bitmap);
